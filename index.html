@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatischer PV-Designer (Erweiterte Inverter-Liste)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .result-item {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .section-title {
+            border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; margin-bottom: 16px;
+            font-size: 1.25rem; font-weight: 600; color: #374151;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-3xl bg-white rounded-xl shadow-lg p-6 md:p-8">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-800">Automatischer PV-Designer</h1>
+            <p class="text-slate-500 mt-2">Planen Sie Ihre Anlage und schätzen Sie alle Kosten an einem Ort.</p>
+        </div>
+
+        <!-- Configuration Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+                <label for="mocInstalacji" class="block text-sm font-medium text-slate-700 mb-1">Ziel-Anlagenleistung (kW)</label>
+                <input type="number" id="mocInstalacji" placeholder="z.B. 85" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="modulPV" class="block text-sm font-medium text-slate-700 mb-1">Photovoltaikmodul auswählen</label>
+                <select id="modulPV" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="410" data-voc="37.4" data-price="130">Jinko Solar 410W (Voc: 37.4V)</option>
+                    <option value="445" data-voc="41.3" data-price="140">Trina Solar 445W (Voc: 41.3V)</option>
+                    <option value="450" data-voc="41.6" data-price="145">Jinko Solar 450W (Voc: 41.6V)</option>
+                    <option value="455" data-voc="41.5" data-price="150">Trina Solar 455W (Voc: 41.5V)</option>
+                    <option value="500" data-voc="45.8" data-price="165">Canadian Solar 500W (Voc: 45.8V)</option>
+                    <option value="550" data-voc="49.9" data-price="180">JA Solar 550W (Voc: 49.9V)</option>
+                    <option value="600" data-voc="54.2" data-price="195">Longi Solar 600W (Voc: 54.2V)</option>
+                </select>
+            </div>
+            <div>
+                <label for="cenaModulu" class="block text-sm font-medium text-slate-700 mb-1">Preis pro Modul (€)</label>
+                <input type="number" id="cenaModulu" placeholder="z.B. 150" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+             <div>
+                <label for="kostenProWp" class="block text-sm font-medium text-slate-700 mb-1">Kosten Unterkonstruktion (€/Wp)</label>
+                <input type="number" id="kostenProWp" value="0.12" step="0.01" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="kostenArbeitProWp" class="block text-sm font-medium text-slate-700 mb-1">Kosten für die Arbeit (€/Wp)</label>
+                <input type="number" id="kostenArbeitProWp" value="0.15" step="0.01" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                 <label for="distanz" class="block text-sm font-medium text-slate-700 mb-1">Entfernung (km)</label>
+                <input type="number" id="distanz" placeholder="z.B. 500" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            </div>
+        </div>
+
+        <div class="text-center mb-8">
+            <button onclick="uruchomObliczenia()" class="w-full md:w-auto bg-blue-600 text-white font-semibold px-8 py-3 text-lg rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm">
+                Entwerfen & Berechnen
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div id="wynik" class="space-y-6">
+             <div id="initialMessage" class="text-center text-slate-400 py-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                <p class="mt-2">Die Berechnungsergebnisse werden hier angezeigt.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const inwerteryHuawei = [
+            { model: "SUN2000-330KTL-H1", moc_kw: 300, liczba_mppt: 12, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-300KTL-H0", moc_kw: 300, liczba_mppt: 12, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-280KTL-H0", moc_kw: 280, liczba_mppt: 12, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-275KTL-H1", moc_kw: 275, liczba_mppt: 12, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-250KTL-H1", moc_kw: 250, liczba_mppt: 12, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-215KTL-H3", moc_kw: 200, liczba_mppt: 9, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-200KTL-H2", moc_kw: 200, liczba_mppt: 9, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-185KTL-H1", moc_kw: 185, liczba_mppt: 9, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-175KTL-H0", moc_kw: 175, liczba_mppt: 9, stringi_na_mppt: 2, max_v_dc: 1500, zakres_v_mppt: [500, 1500] },
+            { model: "SUN2000-125KTL-M2", moc_kw: 125, liczba_mppt: 10, stringi_na_mppt: 2, max_v_dc: 1100, zakres_v_mppt: [200, 1000] },
+            { model: "SUN2000-115KTL-M2", moc_kw: 115, liczba_mppt: 10, stringi_na_mppt: 2, max_v_dc: 1100, zakres_v_mppt: [200, 1000] },
+            { model: "SUN2000-100KTL-M2", moc_kw: 100, liczba_mppt: 10, stringi_na_mppt: 2, max_v_dc: 1100, zakres_v_mppt: [200, 1000] },
+            { model: "SUN2000-50KTL-M3", moc_kw: 50, liczba_mppt: 4, stringi_na_mppt: 2, max_v_dc: 1100, zakres_v_mppt: [200, 1000] },
+            { model: "SUN2000-40KTL-M3", moc_kw: 40, liczba_mppt: 4, stringi_na_mppt: 2, max_v_dc: 1100, zakres_v_mppt: [200, 1000] },
+            { model: "SUN2000-30KTL-M3", moc_kw: 30, liczba_mppt: 3, stringi_na_mppt: 2, max_v_dc: 1100, zakres_v_mppt: [200, 1000] },
+            { model: "SUN2000-20KTL-M5", moc_kw: 20, liczba_mppt: 2, stringi_na_mppt: 2, max_v_dc: 1100, zakres_v_mppt: [200, 1000] },
+            { model: "SUN2000-10KTL-M1", moc_kw: 10, liczba_mppt: 2, stringi_na_mppt: 1, max_v_dc: 1100, zakres_v_mppt: [140, 980] }
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('modulPV').addEventListener('change', updateCena);
+            updateCena();
+        });
+
+        function updateCena() {
+            const selectedOption = document.getElementById('modulPV').options[document.getElementById('modulPV').selectedIndex];
+            document.getElementById('cenaModulu').value = selectedOption.dataset.price;
+        }
+
+        function dobierzInwerteryAutomatycznie(docelowaMocKw) {
+            let pozostalaMoc = docelowaMocKw;
+            const dobraneInwertery = [];
+            for (const inwerter of inwerteryHuawei) {
+                const ilosc = Math.floor(pozostalaMoc / inwerter.moc_kw);
+                if (ilosc > 0) {
+                    for(let i=0; i<ilosc; i++) { dobraneInwertery.push(inwerter); }
+                    pozostalaMoc -= ilosc * inwerter.moc_kw;
+                }
+            }
+            return dobraneInwertery;
+        }
+
+        function uruchomObliczenia() {
+            const mocInstalacjiKw = parseFloat(document.getElementById('mocInstalacji').value);
+            const selectedModulOption = document.getElementById('modulPV').options[document.getElementById('modulPV').selectedIndex];
+            const mocModuluW = parseInt(selectedModulOption.value);
+            const vocModuluV = parseFloat(selectedModulOption.dataset.voc);
+            const cenaZaModul = parseFloat(document.getElementById('cenaModulu').value);
+            const kostenProWp = parseFloat(document.getElementById('kostenProWp').value);
+            const kostenArbeitProWp = parseFloat(document.getElementById('kostenArbeitProWp').value);
+            const distanz = parseFloat(document.getElementById('distanz').value);
+
+            const wynikDiv = document.getElementById('wynik');
+            wynikDiv.innerHTML = '';
+
+            if (isNaN(mocInstalacjiKw) || mocInstalacjiKw <= 0 || isNaN(cenaZaModul) || cenaZaModul < 0 || isNaN(kostenProWp) || kostenProWp < 0 || isNaN(kostenArbeitProWp) || kostenArbeitProWp < 0) {
+                wynikDiv.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg result-item" role="alert"><p class="font-bold">Fehler</p><p>Bitte geben Sie eine positive Leistung und gültige, nicht-negative Kostenwerte ein.</p></div>`;
+                return;
+            }
+
+            const dobraneInwertery = dobierzInwerteryAutomatycznie(mocInstalacjiKw);
+            if (dobraneInwertery.length === 0) {
+                 wynikDiv.innerHTML = `<div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg result-item" role="alert"><p class="font-bold">Hinweis</p><p>Die Zielleistung ist zu gering, um einen Wechselrichter aus der Liste auszuwählen (min. 10 kW).</p></div>`;
+                return;
+            }
+            
+            const calkowitaMocInwerterowKw = dobraneInwertery.reduce((sum, inv) => sum + inv.moc_kw, 0);
+            const iloscModulow = Math.ceil((calkowitaMocInwerterowKw * 1000) / mocModuluW);
+            const rzeczywistaMocInstalacjiKw = (iloscModulow * mocModuluW / 1000).toFixed(2);
+            
+            const kostenModuleNum = iloscModulow * cenaZaModul;
+            const kostenKonstruktionNum = parseFloat(rzeczywistaMocInstalacjiKw) * 1000 * kostenProWp;
+            const kostenArbeitNum = parseFloat(rzeczywistaMocInstalacjiKw) * 1000 * kostenArbeitProWp;
+            
+            const PALETTENKAPAZITAET = 36;
+            const GRUNDGEBUEHR_PRO_PALETTE = 50; // EUR
+            const KOSTEN_PRO_KM = 0.75; // EUR
+            const anzahlPaletten = Math.ceil(iloscModulow / PALETTENKAPAZITAET);
+            const kostenTransportNum = (!isNaN(distanz) && distanz > 0) ? (anzahlPaletten * GRUNDGEBUEHR_PRO_PALETTE) + (distanz * KOSTEN_PRO_KM * anzahlPaletten) : 0;
+
+            const gesamtkosten = kostenModuleNum + kostenKonstruktionNum + kostenArbeitNum + kostenTransportNum;
+
+            let transportHtml = '';
+            if (kostenTransportNum > 0) {
+                transportHtml = `<div class="bg-slate-50 p-6 rounded-xl border border-slate-200 result-item"><h2 class="section-title">Geschätzte Transportkosten</h2><div class="text-center"><div class="text-sm text-slate-500">Gesamtkosten für ${anzahlPaletten} Palette(n)</div><div class="text-4xl font-bold text-blue-600">${kostenTransportNum.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div><div class="text-xs text-slate-500">(${distanz} km)</div></div></div>`;
+            }
+
+            let htmlWyniku = `<div class="bg-blue-100 p-6 rounded-xl border border-blue-200 result-item"><h2 class="section-title text-blue-800">Geschätzte Gesamtkosten</h2><div class="text-center"><div class="text-sm text-blue-600">Summe aller Kosten (Netto)</div><div class="text-5xl font-bold text-blue-700">${gesamtkosten.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div></div></div>
+                ${transportHtml}
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 result-item"><h2 class="section-title">Geschätzte Arbeitskosten</h2><div class="text-center"><div class="text-sm text-slate-500">Gesamtkosten (Netto)</div><div class="text-4xl font-bold text-blue-600">${kostenArbeitNum.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div><div class="text-xs text-slate-500">(${rzeczywistaMocInstalacjiKw} kWp x ${kostenArbeitProWp.toFixed(2)} €/Wp)</div></div></div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 result-item"><h2 class="section-title">Geschätzte Kosten für Unterkonstruktion</h2><div class="text-center"><div class="text-sm text-slate-500">Gesamtkosten (Netto)</div><div class="text-4xl font-bold text-blue-600">${kostenKonstruktionNum.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div><div class="text-xs text-slate-500">(${rzeczywistaMocInstalacjiKw} kWp x ${kostenProWp.toFixed(2)} €/Wp)</div></div></div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 result-item"><h2 class="section-title">Geschätzte Modulkosten</h2><div class="text-center"><div class="text-sm text-slate-500">Gesamtkosten (Netto)</div><div class="text-4xl font-bold text-blue-600">${kostenModuleNum.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div><div class="text-xs text-slate-500">(${iloscModulow} Stk. x ${cenaZaModul.toFixed(2)} €)</div></div></div>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 result-item"><h2 class="section-title">Automatisch ausgewählte Wechselrichter</h2><ul class="space-y-3">`;
+            
+            const podsumowanieInwerterow = {};
+            dobraneInwertery.forEach(inv => { podsumowanieInwerterow[inv.model] = (podsumowanieInwerterow[inv.model] || 0) + 1; });
+            for (const model in podsumowanieInwerterow) {
+                htmlWyniku += `<li class="flex justify-between items-center p-3 bg-white rounded-md border border-slate-200"><span class="text-slate-700 font-semibold">${model}</span><span class="font-bold text-slate-800 text-lg">${podsumowanieInwerterow[model]} Stk.</span></li>`;
+            }
+            htmlWyniku += `</ul><div class="mt-4 text-center text-slate-600 font-semibold">Gesamtleistung der Wechselrichter (AC): ${calkowitaMocInwerterowKw.toFixed(2)} kW</div></div>`;
+            htmlWyniku += `<div class="bg-slate-50 p-6 rounded-xl border border-slate-200 result-item"><h2 class="section-title">Konfiguration der PV-Module</h2><div class="grid grid-cols-2 gap-4 text-center"><div><div class="text-sm text-slate-500">Benötigte Anzahl Module</div><div class="text-3xl font-bold text-slate-800">${iloscModulow}</div></div><div><div class="text-sm text-slate-500">Tatsächliche Anlagenleistung (DC)</div><div class="text-3xl font-bold text-slate-800">${rzeczywistaMocInstalacjiKw} kWp</div></div></div></div>`;
+            htmlWyniku += `<div class="result-item"><h2 class="section-title">String-Konfiguration für jeden Wechselrichter</h2><div class="space-y-4">`;
+
+            let pozostaleModuly = iloscModulow;
+            dobraneInwertery.forEach((inwerter, index) => {
+                let modulyDlaTegoInwertera = (index === dobraneInwertery.length - 1) ? pozostaleModuly : Math.round(iloscModulow * (inwerter.moc_kw / calkowitaMocInwerterowKw));
+                pozostaleModuly -= modulyDlaTegoInwertera;
+                const wynikStringow = obliczStringi(modulyDlaTegoInwertera, vocModuluV, inwerter);
+                htmlWyniku += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200"><h3 class="font-bold text-slate-800">${inwerter.model} (${modulyDlaTegoInwertera} Module)</h3><div class="text-sm text-slate-600 mt-2">${wynikStringow.opis}</div><div class="mt-2 p-2 text-sm rounded-lg ${wynikStringow.status === 'ok' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}"><span class="font-semibold">String-Spannung (Voc @ -25°C):</span> ${wynikStringow.napiecie.toFixed(1)} V (Grenze: ${inwerter.max_v_dc} V)</div></div>`;
+            });
+            htmlWyniku += `</div></div>`;
+            wynikDiv.innerHTML = htmlWyniku;
+        }
+
+        function obliczStringi(iloscModulow, vocModuluV, inwerter) {
+            const tempCorrectionFactor = 1.15;
+            const vocMaxTemp = vocModuluV * tempCorrectionFactor;
+            const maxModulowWStringu = Math.floor(inwerter.max_v_dc / vocMaxTemp);
+            const minModulowWStringu = Math.ceil(inwerter.zakres_v_mppt[0] / vocModuluV);
+            const maxDostepnychStringow = inwerter.liczba_mppt * inwerter.stringi_na_mppt;
+
+            if (iloscModulow < minModulowWStringu && iloscModulow > 0) return { opis: `Zu wenige Module (${iloscModulow}), um einen gültigen String zu bilden (min. ${minModulowWStringu} erforderlich).`, napiecie: 0, status: 'error' };
+            if (iloscModulow === 0) return { opis: `Keine Module zum Konfigurieren.`, napiecie: 0, status: 'ok' };
+
+            let najlepszaKonfiguracja = { roznica: Infinity, liczbaStringow: 0, modulyNaString: 0, reszta: 0 };
+            for (let s = Math.min(maxDostepnychStringow, iloscModulow); s >= 1; s--) {
+                let modulyPodstawa = Math.floor(iloscModulow / s);
+                let reszta = iloscModulow % s;
+                let modulyGora = modulyPodstawa + (reszta > 0 ? 1 : 0);
+                if (modulyPodstawa >= minModulowWStringu && modulyGora <= maxModulowWStringu) {
+                    let roznicaDlugosci = (reszta === 0) ? 0 : 1;
+                    if (roznicaDlugosci <= najlepszaKonfiguracja.roznica) {
+                        najlepszaKonfiguracja = { roznica: roznicaDlugosci, liczbaStringow: s, modulyNaString: modulyPodstawa, reszta: reszta };
+                    }
+                }
+            }
+
+            if (najlepszaKonfiguracja.liczbaStringow === 0) return { opis: `Keine optimale Konfiguration für ${iloscModulow} Module gefunden. Spannungs-Grenzwerte prüfen. Erforderlich: ${minModulowWStringu}-${maxModulowWStringu} Module/String.`, napiecie: 0, status: 'error' };
+            
+            const { liczbaStringow, modulyNaString, reszta } = najlepszaKonfiguracja;
+            let opis, napiecieMax;
+            if (reszta === 0) {
+                opis = `Empfohlene Konfiguration: <strong>${liczbaStringow} String(s)</strong> mit je <strong>${modulyNaString} Modulen</strong>.`;
+                napiecieMax = modulyNaString * vocMaxTemp;
+            } else {
+                opis = `Empfohlene Konfiguration: <strong>${liczbaStringow} String(s)</strong> (${reszta} x ${modulyNaString + 1} Module und ${liczbaStringow - reszta} x ${modulyNaString} Module).`;
+                napiecieMax = (modulyNaString + 1) * vocMaxTemp;
+            }
+            return { opis, napiecie: napiecieMax, status: 'ok' };
+        }
+    </script>
+</body>
+</html>
