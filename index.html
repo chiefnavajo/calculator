@@ -799,80 +799,93 @@
     el('generateExcelButton').addEventListener('click', () => {
         const wb = XLSX.utils.book_new();
         
-        // Customer Data Sheet
-        const customerData = [
-            {"Feld": "Firma", "Wert": el('customerCompany').value},
-            {"Feld": "Ansprechpartner", "Wert": el('customerContact').value},
-            {"Feld": "Straße & Hausnummer", "Wert": el('customerAddress').value},
-            {"Feld": "PLZ", "Wert": el('customerZip').value},
-            {"Feld": "Ort", "Wert": el('customerCity').value},
-        ];
-        const ws_customer = XLSX.utils.json_to_sheet(customerData);
-        XLSX.utils.book_append_sheet(wb, ws_customer, "Kundendaten");
-
         const allData = [];
-        allData.push(["Kategorie", "Komponente / Beschreibung", "Anzahl", "Einzelpreis (€)", "Gesamtkosten (€)"]);
+        allData.push(["Kostenaufstellung PV-Anlage"]);
+        allData.push([]); // Spacer
+        
+        // Customer Data
+        allData.push(["Kundendaten"]);
+        allData.push(["Firma:", el('customerCompany').value]);
+        allData.push(["Ansprechpartner:", el('customerContact').value]);
+        allData.push(["Adresse:", `${el('customerAddress').value}, ${el('customerZip').value} ${el('customerCity').value}`]);
+        allData.push([]); // Spacer
+
+        allData.push(["Kategorie", "Beschreibung", "Anzahl", "Einzelpreis (€)", "Gesamtpreis (€)"]);
         
         // Module
-        allData.push(["Module", qs('#panelModel option:checked').text, String(numVal(el('panelCount'))), String(numVal(el('panelPrice'))), String(numVal(el('panelRowTotal')))]);
-        allData.push(["", "Transport Module", "", "", String(numVal(el('panelTransportTotalDisplay')))]);
+        allData.push(["Module", qs('#panelModel option:checked').text, numVal(el('panelCount')), numVal(el('panelPrice')), numVal(el('panelRowTotal'))]);
+        allData.push(["", "Transport Module", "", "", numVal(el('panelTransportTotalDisplay'))]);
 
         // Wechselrichter
         qsa('.inverter-row').forEach(row => {
             allData.push([
                 "Wechselrichter",
                 qs('.inverter-model option:checked', row).text,
-                String(numVal(qs('.inverter-count', row))),
-                String(numVal(qs('.inverter-price', row))),
-                String(numVal(qs('.inverter-total', row)))
+                numVal(qs('.inverter-count', row)),
+                numVal(qs('.inverter-price', row)),
+                numVal(qs('.inverter-total', row))
             ]);
         });
-        allData.push(["", "Transport Wechselrichter", "", "", String(numVal(el('inverterTransportTotalDisplay')))]);
+        allData.push(["", "Transport Wechselrichter", "", "", numVal(el('inverterTransportTotalDisplay'))]);
 
         // Speicher
         qsa('.battery-row').forEach(row => {
-            allData.push([
-                "Speicher",
-                qs('.battery-model option:checked', row).text,
-                String(numVal(qs('.battery-count', row))),
-                String(numVal(qs('.battery-price', row))),
-                String(numVal(qs('.battery-total', row)))
-            ]);
+            if (numVal(qs('.battery-count', row)) > 0) {
+                 allData.push([
+                    "Speicher",
+                    qs('.battery-model option:checked', row).text,
+                    numVal(qs('.battery-count', row)),
+                    numVal(qs('.battery-price', row)),
+                    numVal(qs('.battery-total', row))
+                ]);
+            }
         });
         qsa('.bms-row').forEach(row => {
-            allData.push([
-                "Speicher",
-                qs('.bms-model option:checked', row).text,
-                String(numVal(qs('.bms-count', row))),
-                String(numVal(qs('.bms-price', row))),
-                String(numVal(qs('.bms-total', row)))
-            ]);
+             if (numVal(qs('.bms-count', row)) > 0) {
+                allData.push([
+                    "Speicher",
+                    qs('.bms-model option:checked', row).text,
+                    numVal(qs('.bms-count', row)),
+                    numVal(qs('.bms-price', row)),
+                    numVal(qs('.bms-total', row))
+                ]);
+            }
         });
-        allData.push(["", "Transport Speicher", "", "", String(numVal(el('batteryTransportTotalDisplay')))]);
-
+        if(numVal(el('batteryTransportTotalDisplay')) > 0) {
+            allData.push(["", "Transport Speicher", "", "", numVal(el('batteryTransportTotalDisplay'))]);
+        }
+        
         // Verschiedene Kosten
-        allData.push(["Verschiedene Kosten", "Unterkonstruktion", `${numVal(el('constructionCost'))} €/Wp`, "", String(numVal(el('constructionTotalDisplay')))]);
-        allData.push(["", "Montagekosten", `${numVal(el('accessoriesCost'))} €/Wp`, "", String(numVal(el('accessoriesTotalDisplay')))]);
+        allData.push(["Verschiedene Kosten", "Unterkonstruktion", `${numVal(el('constructionCost'))} €/Wp`, "", numVal(el('constructionTotalDisplay'))]);
+        allData.push(["", "Montagekosten", `${numVal(el('accessoriesCost'))} €/Wp`, "", numVal(el('accessoriesTotalDisplay'))]);
         qsa('.additional-cost-row').forEach((row, index) => {
-            allData.push([
-                "",
-                qs(`#addCostDesc_${index}`).value || `Zusatzkosten ${index + 1}`,
-                String(numVal(qs(`#addCostQty_${index}`))),
-                String(numVal(qs(`#addCostPrice_${index}`))),
-                String((numVal(qs(`#addCostQty_${index}`)) * numVal(qs(`#addCostPrice_${index}`))))
-            ]);
+            if(numVal(qs(`#addCostPrice_${index}`))) {
+                allData.push([
+                    "",
+                    qs(`#addCostDesc_${index}`).value || `Zusatzkosten ${index + 1}`,
+                    numVal(qs(`#addCostQty_${index}`)),
+                    numVal(qs(`#addCostPrice_${index}`)),
+                    (numVal(qs(`#addCostQty_${index}`)) * numVal(qs(`#addCostPrice_${index}`)))
+                ]);
+            }
         });
         allData.push([]); // Spacer
 
         // Zusammenfassung
-        allData.push(["Zusammenfassung", "", "", ""]);
-        allData.push(["Gesamtanlagenleistung", el('result-totalPower').innerText, "", ""]);
-        allData.push(["GESAMTE EPC-KOSTEN", "", "", el('result-totalEPCCost').innerText]);
-        allData.push(["ENDPREIS FÜR KUNDEN", "", "", el('result-finalClientPrice').innerText]);
+        allData.push(["Zusammenfassung", "", "", "", ""]);
+        allData.push(["Gesamtanlagenleistung", el('result-totalPower').innerText, "", "", ""]);
+        allData.push(["GESAMTE EPC-KOSTEN", "", "", "", el('result-totalEPCCost').innerText]);
+        allData.push(["ENDPREIS FÜR KUNDEN", "", "", "", el('result-finalClientPrice').innerText]);
 
-        const ws_all = XLSX.utils.aoa_to_sheet(allData);
-        XLSX.utils.book_append_sheet(wb, ws_all, 'Alle Kosten');
+        const ws = XLSX.utils.aoa_to_sheet(allData);
+        
+        // Set column widths
+        const columnWidths = [
+            {wch: 20}, {wch: 60}, {wch: 10}, {wch: 15}, {wch: 15}
+        ];
+        ws['!cols'] = columnWidths;
 
+        XLSX.utils.book_append_sheet(wb, ws, 'Kostenaufstellung');
         XLSX.writeFile(wb, "kostenaufstellung_komplett.xlsx");
     });
 
