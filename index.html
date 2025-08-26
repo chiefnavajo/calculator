@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0CsdC3E_IH8Hl9ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" xintegrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
     body{font-family:'Inter',sans-serif}
     body::-webkit-scrollbar{width:8px}
@@ -16,21 +18,21 @@
     .num{font-variant-numeric:tabular-nums}
   </style>
 </head>
-<body class="bg-slate-100 p-6 flex items-center justify-center min-h-screen">
-  <div class="bg-white rounded-2xl shadow-xl p-8 max-w-4xl w-full mx-auto">
+<body class="bg-slate-100 p-2 sm:p-6 flex items-center justify-center min-h-screen">
+  <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-8 max-w-4xl w-full mx-auto">
     <header>
-      <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6">FRP STORE SOLUTIONS - PV Installationskosten-Rechner</h1>
-      <p class="text-center text-gray-600 mb-8">Geben Sie die Details Ihres Projekts ein, um eine umfassende Kostenaufstellung und den endgültigen Kundenpreis zu erhalten.</p>
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6">FRP STORE SOLUTIONS - PV Rechner</h1>
+      <p class="text-center text-gray-600 mb-8">Geben Sie die Projektdetails ein, um eine Kostenaufstellung zu erhalten.</p>
     </header>
 
     <form id="calculatorForm" class="space-y-6">
       <!-- Panels Section -->
-      <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <section class="bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"/></svg>
           Module
         </h2>
-        <div class="grid md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label for="panelModel" class="block text-sm font-medium text-gray-700">Modell</label>
             <select id="panelModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
@@ -57,7 +59,7 @@
             <input type="text" id="panelRowTotal" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 font-bold text-right num" value="0.00" readonly />
           </div>
         </div>
-        <div class="mt-4 grid md:grid-cols-4 gap-4">
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label for="panelShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
             <select id="panelShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
@@ -78,16 +80,14 @@
             <input type="text" id="panelTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
           </div>
         </div>
-        <div class="mt-4 pt-4 border-t-2 border-slate-300 grid md:grid-cols-4 gap-4 items-center">
-            <div class="md:col-span-3 text-right font-bold text-gray-700 text-lg pr-2">Zwischensumme Module</div>
-            <div>
-                <input type="text" id="subtotalPanels" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
-            </div>
+        <div class="mt-4 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
+            <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Module</span>
+            <input type="text" id="subtotalPanels" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
         </div>
       </section>
 
       <!-- Inverter Section -->
-      <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <section class="bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M4.929 12a7 7 0 1114 0c0 1.573-.393 3.09-1.144 4.41L17.7 17.7a7 7 0 01-5.7 3.3c-.927 0-1.82-.187-2.65-.544l-.23-.09A7.001 7.001 0 014.93 12z"/></svg>
           Wechselrichter
@@ -97,7 +97,7 @@
             <button type="button" id="addInverterButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiterer Wechselrichter</button>
         </div>
         <div id="inverterItems" class="space-y-3"></div>
-        <div class="mt-4 grid md:grid-cols-4 gap-4">
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label for="inverterShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
             <select id="inverterShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
@@ -118,16 +118,14 @@
             <input type="text" id="inverterTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
           </div>
         </div>
-        <div class="mt-4 pt-4 border-t-2 border-slate-300 grid md:grid-cols-4 gap-4 items-center">
-            <div class="md:col-span-3 text-right font-bold text-gray-700 text-lg pr-2">Zwischensumme Wechselrichter</div>
-            <div>
-                <input type="text" id="subtotalInverter" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
-            </div>
+        <div class="mt-4 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
+            <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Wechselrichter</span>
+            <input type="text" id="subtotalInverter" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
         </div>
       </section>
 
       <!-- Battery Section -->
-      <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <section class="bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 3.363-2.73 6.093-6.093 6.093h-.758v1.365c0 1.258-.87 2.308-2.008 2.531a2.383 2.383 0 01-2.083-2.327l.006-.173V12.75H4.125c-3.363 0-6.093-2.73-6.093-6.093S.762.282 4.125.282h12.031c3.363 0 6.093 2.73 6.093 6.093zm-5.625 2.25v-3.75h-8.25v3.75h8.25z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12.375 14.25v-1.5h-1.5v1.5h1.5z" transform="rotate(90 12.375 14.25)"/></svg>
           Speicher (Optional)
@@ -148,7 +146,7 @@
         <div id="bmsItems" class="space-y-3"></div>
 
         <!-- Transport -->
-        <div class="mt-6 grid md:grid-cols-4 gap-4">
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label for="batteryShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
             <select id="batteryShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
@@ -169,22 +167,20 @@
             <input type="text" id="batteryTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
           </div>
         </div>
-        <div class="mt-6 pt-4 border-t-2 border-slate-300 grid md:grid-cols-4 gap-4 items-center">
-            <div class="md:col-span-3 text-right font-bold text-gray-700 text-lg pr-2">Zwischensumme Speicher</div>
-            <div>
-                <input type="text" id="subtotalStorage" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
-            </div>
+        <div class="mt-6 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
+            <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Speicher</span>
+            <input type="text" id="subtotalStorage" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
         </div>
       </section>
 
       <!-- Other Costs Section -->
-      <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <section class="bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           Verschiedene Kosten
         </h2>
         <div class="space-y-4">
-            <div class="grid md:grid-cols-2 gap-4 border-b border-slate-200 pb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-200 pb-4">
               <div>
                 <label for="constructionCost" class="block text-sm font-medium text-gray-700">Unterkonstruktion (€/Wp)</label>
                 <input type="number" id="constructionCost" value="0.15" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
@@ -194,7 +190,7 @@
                 <input type="text" id="constructionTotalDisplay" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 font-bold text-right num" value="0.00" readonly />
               </div>
             </div>
-            <div class="grid md:grid-cols-2 gap-4 border-b border-slate-200 pb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-200 pb-4">
                 <div>
                     <label for="accessoriesCost" class="block text-sm font-medium text-gray-700">Montagekosten (€/Wp)</label>
                     <input type="number" id="accessoriesCost" value="0.05" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
@@ -210,14 +206,14 @@
           <div id="additionalCostsContainer"></div>
           <button type="button" id="addCostButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ Weiteren Kostenpunkt hinzufügen</button>
         </div>
-        <div class="mt-6 pt-4 border-t-2 border-slate-300 grid md:grid-cols-2 gap-4 items-center">
-            <label class="block text-lg font-bold text-gray-700 text-right">Zwischensumme Verschiedene Kosten</label>
-            <input type="text" id="subtotalMisc" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
+        <div class="mt-6 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
+            <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Verschiedene Kosten</span>
+            <input type="text" id="subtotalMisc" class="w-full sm:w-1/2 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
         </div>
       </section>
 
       <!-- Final Price Calculation Method -->
-      <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+      <section class="bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
         <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 110-18 9 9 0 010 18z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c.966 0 1.905.212 2.753.627A5.992 5.992 0 0012 17.5a5.992 5.992 0 00-2.753-4.873A3.001 3.001 0 0112 12z"/></svg>
           Endpreis-Berechnung
@@ -242,8 +238,9 @@
         </div>
       </section>
 
-      <div class="flex justify-center">
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
         <button type="button" id="calculateButton" class="w-full md:w-auto px-8 py-4 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition-colors font-bold text-lg">Kosten berechnen</button>
+        <button type="button" id="generatePdfButton" class="w-full md:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-700 transition-colors font-bold text-lg hidden">PDF Dokument generieren</button>
       </div>
     </form>
 
@@ -254,27 +251,27 @@
         <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-sm">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Komponente</th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Gesamtkosten (€)</th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Kosten pro Wp (€/Wp)</th>
+              <th class="px-2 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Komponente</th>
+              <th class="px-2 py-3 sm:px-6 sm:py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Gesamtkosten (€)</th>
+              <th class="px-2 py-3 sm:px-6 sm:py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Kosten pro Wp (€/Wp)</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Gesamtanlagenleistung</td>
-              <td id="result-totalPower" colspan="2" class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">0 Wp</td>
+              <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm font-medium text-gray-900">Gesamtanlagenleistung</td>
+              <td id="result-totalPower" colspan="2" class="px-2 py-3 sm:px-6 sm:py-4 text-right whitespace-nowrap text-sm text-gray-500">0 Wp</td>
             </tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Module (Materialien)</td><td id="result-panelsCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-panelsCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Wechselrichter (Materialien)</td><td id="result-inverterCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-inverterCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Batteriemodule & BMS</td><td id="result-batteryCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-batteryCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Unterkonstruktion</td><td id="result-constructionTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-constructionUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Montagekosten</td><td id="result-accessoriesTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-accessoriesUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm font-bold text-gray-900">Zusätzliche Kosten</td><td id="result-additionalCostsTotal" class="px-6 py-4 text-right font-bold text-sm text-gray-500">0.00</td><td id="result-additionalCostsPerWp" class="px-6 py-4 text-right font-bold text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Module</td><td id="result-panelTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-panelTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Wechselrichter</td><td id="result-inverterTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-inverterTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Speicher</td><td id="result-batteryTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-batteryTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-            <tr class="bg-gray-100 font-bold"><td class="px-6 py-4 text-base text-gray-900">GESAMTE EPC-KOSTEN</td><td id="result-totalEPCCost" class="px-6 py-4 text-right text-base text-gray-900">0.00</td><td id="result-totalEPCCostPerWp" class="px-6 py-4 text-right text-base text-gray-900">0.00</td></tr>
-            <tr class="bg-green-100 font-bold text-green-800 text-lg"><td class="px-6 py-4">ENDPREIS FÜR KUNDEN</td><td id="result-finalClientPrice" colspan="2" class="px-6 py-4 text-right">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Module (Materialien)</td><td id="result-panelsCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-panelsCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Wechselrichter (Materialien)</td><td id="result-inverterCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-inverterCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Batteriemodule & BMS</td><td id="result-batteryCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-batteryCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Unterkonstruktion</td><td id="result-constructionTotalCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-constructionUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Montagekosten</td><td id="result-accessoriesTotalCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-accessoriesUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm font-bold text-gray-900">Zusätzliche Kosten</td><td id="result-additionalCostsTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td><td id="result-additionalCostsPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Module</td><td id="result-panelTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-panelTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Wechselrichter</td><td id="result-inverterTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-inverterTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
+            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Speicher</td><td id="result-batteryTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-batteryTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
+            <tr class="bg-gray-100 font-bold"><td class="px-2 py-3 sm:px-6 sm:py-4 text-base text-gray-900">GESAMTE EPC-KOSTEN</td><td id="result-totalEPCCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td><td id="result-totalEPCCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td></tr>
+            <tr class="bg-green-100 font-bold text-green-800 text-lg"><td class="px-2 py-3 sm:px-6 sm:py-4">ENDPREIS FÜR KUNDEN</td><td id="result-finalClientPrice" colspan="2" class="px-2 py-3 sm:px-6 sm:py-4 text-right">0.00</td></tr>
           </tbody>
         </table>
       </div>
@@ -359,9 +356,9 @@
 
       const addInverterRow = () => {
         const row = document.createElement('div');
-        row.className = 'grid grid-cols-12 gap-4 inverter-row items-end pb-2';
+        row.className = 'flex flex-col sm:flex-row sm:items-end gap-2 inverter-row pb-2';
         row.innerHTML = `
-          <div class="col-span-11 grid md:grid-cols-4 gap-4">
+          <div class="flex-grow grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700">Modell</label>
               <select class="inverter-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${inverterOptionsHtml}</select>
@@ -379,9 +376,9 @@
               <input type="text" class="inverter-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
             </div>
           </div>
-          <div class="col-span-1 flex items-center justify-center">
-             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <div class="flex-shrink-0">
+             <button type="button" class="delete-row-btn p-2 w-full sm:w-auto text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </button>
@@ -397,9 +394,9 @@
 
       const addBatteryRow = () => {
         const row = document.createElement('div');
-        row.className = 'grid grid-cols-12 gap-4 battery-row items-end pb-2';
+        row.className = 'flex flex-col sm:flex-row sm:items-end gap-2 battery-row pb-2';
         row.innerHTML = `
-          <div class="col-span-11 grid md:grid-cols-4 gap-4">
+          <div class="flex-grow grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700">Modell</label>
               <select class="battery-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${batteryOptionsHtml}</select>
@@ -417,9 +414,9 @@
               <input type="text" class="battery-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
             </div>
           </div>
-          <div class="col-span-1 flex items-center justify-center">
-             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <div class="flex-shrink-0">
+             <button type="button" class="delete-row-btn p-2 w-full sm:w-auto text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </button>
@@ -433,9 +430,9 @@
 
       const addBmsRow = () => {
         const row = document.createElement('div');
-        row.className = 'grid grid-cols-12 gap-4 bms-row items-end pb-2';
+        row.className = 'flex flex-col sm:flex-row sm:items-end gap-2 bms-row pb-2';
         row.innerHTML = `
-          <div class="col-span-11 grid md:grid-cols-4 gap-4">
+          <div class="flex-grow grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-700">BMS-Modell</label>
               <select class="bms-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${bmsOptionsHtml}</select>
@@ -453,9 +450,9 @@
               <input type="text" class="bms-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
             </div>
           </div>
-          <div class="col-span-1 flex items-center justify-center">
-             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <div class="flex-shrink-0">
+             <button type="button" class="delete-row-btn p-2 w-full sm:w-auto text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </button>
@@ -471,9 +468,9 @@
         const container = el('additionalCostsContainer');
         const index = container.children.length; if (index >= 10) return;
         const div = document.createElement('div');
-        div.className = 'grid grid-cols-12 gap-4 additional-cost-row items-end pb-2 border-t border-slate-200 pt-4';
+        div.className = 'flex flex-col sm:flex-row sm:items-end gap-2 additional-cost-row pb-2 border-t border-slate-200 pt-4';
         div.innerHTML = `
-          <div class="col-span-11 grid md:grid-cols-4 gap-2">
+          <div class="flex-grow grid grid-cols-1 md:grid-cols-4 gap-2">
             <div>
               <label for="addCostDesc_${index}" class="block text-sm font-medium text-gray-700">Beschreibung</label>
               <input type="text" id="addCostDesc_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="z.B. Überwachung" />
@@ -494,9 +491,9 @@
               <input type="number" id="addCostPrice_${index}" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
             </div>
           </div>
-          <div class="col-span-1 flex items-center justify-center">
-             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <div class="flex-shrink-0">
+             <button type="button" class="delete-row-btn p-2 w-full sm:w-auto text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </button>
@@ -630,6 +627,7 @@
         setText('result-totalEPCCostPerWp', safeDiv(totalEPCCost, totalPowerWp));
         setText('result-finalClientPrice', finalClientPrice.toFixed(2));
         el('results').classList.remove('hidden');
+        el('generatePdfButton').classList.remove('hidden');
       };
 
       // --- Event Listeners ---
@@ -768,6 +766,54 @@
       el('addCostButton').addEventListener('click', addAdditionalCostField);
       el('addBatteryButton').addEventListener('click', addBatteryRow);
       el('addBmsButton').addEventListener('click', addBmsRow);
+
+      el('generatePdfButton').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+        const resultsSection = el('results');
+        const pdfButton = el('generatePdfButton');
+
+        pdfButton.innerText = 'PDF wird erstellt...';
+        pdfButton.disabled = true;
+
+        html2canvas(resultsSection, {
+            scale: 2,
+            useCORS: true
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const ratio = canvasWidth / canvasHeight;
+
+            let imgWidth = pdfWidth - 20;
+            let imgHeight = imgWidth / ratio;
+
+            if (imgHeight > pdfHeight - 20) {
+                imgHeight = pdfHeight - 20;
+                imgWidth = imgHeight * ratio;
+            }
+            
+            const x = (pdfWidth - imgWidth) / 2;
+            const y = 10;
+
+            pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
+            pdf.save('kostenaufstellung.pdf');
+
+            pdfButton.innerText = 'PDF Dokument generieren';
+            pdfButton.disabled = false;
+        }).catch(err => {
+            console.error("Fehler bei der PDF-Erstellung:", err);
+            pdfButton.innerText = 'PDF Dokument generieren';
+            pdfButton.disabled = false;
+        });
+    });
 
       // --- Init ---
       addInverterRow();
