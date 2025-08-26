@@ -4,42 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRP STORE SOLUTIONS - PV Installationskosten-Rechner</title>
-    <!-- Tailwind CSS for styling -->
+    <!-- Use Tailwind CSS for a professional, responsive design -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
         /* Custom scrollbar for better aesthetics */
-        body::-webkit-scrollbar { width: 8px; }
-        body::-webkit-scrollbar-track { background: #f1f5f9; }
-        body::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="bg-slate-100 p-6 flex items-center justify-center min-h-screen">
     <div class="bg-white rounded-2xl shadow-xl p-8 max-w-4xl w-full mx-auto">
-        <header>
-            <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6">
-                FRP STORE SOLUTIONS - PV Installationskosten-Rechner
-            </h1>
-            <p class="text-center text-gray-600 mb-8">
-                Geben Sie die Details Ihres Projekts ein, um eine umfassende Kostenaufstellung und den endgültigen Kundenpreis zu erhalten.
-            </p>
-        </header>
+        <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-6">
+            FRP STORE SOLUTIONS - PV Installationskosten-Rechner
+        </h1>
+        <p class="text-center text-gray-600 mb-8">
+            Geben Sie die Details Ihres Projekts ein, um eine umfassende Kostenaufstellung und den endgültigen Kundenpreis zu erhalten.
+        </p>
 
         <form id="calculatorForm" class="space-y-6">
             <!-- Panels Section -->
-            <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                    </svg>
                     Module
                 </h2>
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label for="panelModel" class="block text-sm font-medium text-gray-700">Modell</label>
-                        <select id="panelModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <select id="panelModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" onchange="updatePanelPrice()">
                             <option value="435" data-price="46.99">Trina TSM-435NEG9RC.27 (435W, Outlet) - 46,99 €</option>
                             <option value="440" data-price="52.98">Trina TSM-440NEG9R.25 (440W, Full Black Outlet) - 52,98 €</option>
                             <option value="440" data-price="51.29">Trina TSM-440NEG9RC.27 (440W, N-Typ, Outlet) - 51,29 €</option>
@@ -61,56 +69,86 @@
                 </div>
                 <div class="mt-4 grid md:grid-cols-4 gap-4">
                     <div>
-                        <label for="panelTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
-                        <input type="number" id="panelTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <label for="panelShipmentType" class="block text-sm font-medium text-gray-700">Versandart</label>
+                        <select id="panelShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                            <option value="pallet">Europalette</option>
+                            <option value="package">Paket</option>
+                        </select>
                     </div>
                     <div>
-                        <label for="panelTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
-                        <input type="number" id="panelTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <label for="panelTransportCount" class="block text-sm font-medium text-gray-700">Menge</label>
+                        <input type="number" id="panelTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" oninput="updatePanelTransportTotal()">
+                    </div>
+                    <div>
+                        <label for="panelTransportPrice" class="block text-sm font-medium text-gray-700">Preis pro Einheit (€)</label>
+                        <input type="number" id="panelTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" oninput="updatePanelTransportTotal()">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Gesamt (€)</label>
-                        <input type="text" id="panelTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100" readonly>
+                        <input type="text" id="panelTransportTotal" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100" readonly>
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Inverter Section -->
-            <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M4.929 12a7 7 0 1114 0c0 1.573-.393 3.09-1.144 4.41L17.7 17.7a7 7 0 01-5.7 3.3c-.927 0-1.82-.187-2.65-.544l-.23-.09A7.001 7.001 0 014.93 12z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M4.929 12a7 7 0 1114 0c0 1.573-.393 3.09-1.144 4.41L17.7 17.7a7 7 0 01-5.7 3.3c-.927 0-1.82-.187-2.65-.544l-.23-.09A7.001 7.001 0 014.93 12z" />
+                    </svg>
                     Wechselrichter
                 </h2>
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label for="inverterModel" class="block text-sm font-medium text-gray-700">Modell</label>
-                        <select id="inverterModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
-                           <option value="10000" data-price="1238.78">SUN2000-10K-MAP0 (10kW, hybrid, 3-phasig) - 1238,78 €</option>
-                           <option value="10000" data-price="1174.00">SUN2000-10KTL-LC0 (10kW, hybrid, 1-phasig) - 1174,00 €</option>
-                           <option value="10000" data-price="849.48" selected>SUN2000-10KTL-M1-HC (10kW, hybrid, 3-phasig, high-current) - 849,48 €</option>
-                           <option value="12000" data-price="1337.87">SUN2000-12K-MAP0 (12kW, hybrid, 3-phasig) - 1337,87 €</option>
-                           <option value="12000" data-price="1598.88">SUN2000-12K-MB0 (12kW, hybrid, 3-phasig, high-current) - 1598,88 €</option>
-                           <option value="12000" data-price="815.62">SUN2000-12KTL-M5 (12kW, on-grid, 3-phasig) - 815,62 €</option>
-                           <option value="15000" data-price="1799.92">SUN2000-15K-MB0 (15kW, hybrid, 3-phasig, high-current) - 1799,92 €</option>
-                           <option value="15000" data-price="984.37">SUN2000-15KTL-M5 (15kW, on-grid, 3-phasig) - 984,37 €</option>
-                           <option value="17000" data-price="1857.88">SUN2000-17K-MB0 (17kW, hybrid, 3-phasig, high-current) - 1857,88 €</option>
-                           <option value="17000" data-price="659.89">SUN2000-17KTL-M2-HC (17kW, on-grid, 3-phasig, high-current) - 659,89 €</option>
-                           <option value="17000" data-price="1015.62">SUN2000-17KTL-M5 (17kW, on-grid, 3-phasig) - 1015,62 €</option>
-                           <option value="20000" data-price="1944.66">SUN2000-20K-MB0 (20kW, hybrid, 3-phasig, high-current) - 1944,66 €</option>
-                           <option value="25000" data-price="1989.78">SUN2000-25K-MB0 (25kW, hybrid, 3-phasig, high-current) - 1989,78 €</option>
-                           <option value="3000" data-price="609.98">SUN2000-3KTL-M1-HC (3kW, hybrid, 3-phasig, high-current) - 609,98 €</option>
-                           <option value="4000" data-price="509.57">SUN2000-4KTL-L1 (4kW, hybrid, 1-phasig) - 509,57 €</option>
-                           <option value="4000" data-price="645.38">SUN2000-4KTL-M1-HC (4kW, hybrid, 3-phasig, high-current) - 645,38 €</option>
-                           <option value="5000" data-price="839.12">SUN2000-5K-MAP0 (5kW, hybrid, 3-phasig) - 839,12 €</option>
-                           <option value="5000" data-price="571.00">SUN2000-5KTL-L1 (5kW, hybrid, 1-phasig) - 571,00 €</option>
-                           <option value="5000" data-price="648.95">SUN2000-5KTL-M1-HC (5kW, hybrid, 3-phasig, high-current) - 648,95 €</option>
-                           <option value="6000" data-price="941.68">SUN2000-6K-MAP0 (6kW, hybrid, 3-phasig) - 941,68 €</option>
-                           <option value="6000" data-price="654.73">SUN2000-6KTL-L1 (6kW, hybrid, 1-phasig) - 654,73 €</option>
-                           <option value="6000" data-price="718.75">SUN2000-6KTL-M1-HC (6kW, hybrid, 3-phasig, high-current) - 718,75 €</option>
-                           <option value="8000" data-price="1102.77">SUN2000-8K-MAP0 (8kW, hybrid, 3-phasig) - 1102,77 €</option>
-                           <option value="8000" data-price="1057.00">SUN2000-8KTL-LC0 (8kW, hybrid, 1-phasig) - 1057,00 €</option>
-                           <option value="8000" data-price="719.99">SUN2000-8KTL-M1-HC (8kW, hybrid, 3-phasig, high-current) - 719,99 €</option>
-                           <option value="1" data-price="265.58">EMMA-A02 (Energy Management Assistant) - 265,58 €</option>
+                        <select id="inverterModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" onchange="updateInverterPrice()">
+                            <option value="10000" data-price="1238.78">SUN2000-10K-MAP0 (10kW, hybrid, 3-phasig) - 1238,78 €</option>
+                            <option value="10000" data-price="1174.00">SUN2000-10KTL-LC0 (10kW, hybrid, 1-phasig) - 1174,00 €</option>
+                            <option value="10000" data-price="849.48" selected>SUN2000-10KTL-M1-HC (10kW, hybrid, 3-phasig, high-current) - 849,48 €</option>
+                            <option value="12000" data-price="1337.87">SUN2000-12K-MAP0 (12kW, hybrid, 3-phasig) - 1337,87 €</option>
+                            <option value="12000" data-price="1598.88">SUN2000-12K-MB0 (12kW, hybrid, 3-phasig, high-current) - 1598,88 €</option>
+                            <option value="12000" data-price="815.62">SUN2000-12KTL-M5 (12kW, on-grid, 3-phasig) - 815,62 €</option>
+                            <option value="15000" data-price="1799.92">SUN2000-15K-MB0 (15kW, hybrid, 3-phasig, high-current) - 1799,92 €</option>
+                            <option value="15000" data-price="984.37">SUN2000-15KTL-M5 (15kW, on-grid, 3-phasig) - 984,37 €</option>
+                            <option value="17000" data-price="1857.88">SUN2000-17K-MB0 (17kW, hybrid, 3-phasig, high-current) - 1857,88 €</option>
+                            <option value="17000" data-price="659.89">SUN2000-17KTL-M2-HC (17kW, on-grid, 3-phasig, high-current) - 659,89 €</option>
+                            <option value="17000" data-price="1015.62">SUN2000-17KTL-M5 (17kW, on-grid, 3-phasig) - 1015,62 €</option>
+                            <option value="20000" data-price="1944.66">SUN2000-20K-MB0 (20kW, hybrid, 3-phasig, high-current) - 1944,66 €</option>
+                            <option value="25000" data-price="1989.78">SUN2000-25K-MB0 (25kW, hybrid, 3-phasig, high-current) - 1989,78 €</option>
+                            <option value="3000" data-price="609.98">SUN2000-3KTL-M1-HC (3kW, hybrid, 3-phasig, high-current) - 609,98 €</option>
+                            <option value="4000" data-price="509.57">SUN2000-4KTL-L1 (4kW, hybrid, 1-phasig) - 509,57 €</option>
+                            <option value="4000" data-price="645.38">SUN2000-4KTL-M1-HC (4kW, hybrid, 3-phasig, high-current) - 645,38 €</option>
+                            <option value="5000" data-price="839.12">SUN2000-5K-MAP0 (5kW, hybrid, 3-phasig) - 839,12 €</option>
+                            <option value="5000" data-price="571.00">SUN2000-5KTL-L1 (5kW, hybrid, 1-phasig) - 571,00 €</option>
+                            <option value="5000" data-price="648.95">SUN2000-5KTL-M1-HC (5kW, hybrid, 3-phasig, high-current) - 648,95 €</option>
+                            <option value="6000" data-price="941.68">SUN2000-6K-MAP0 (6kW, hybrid, 3-phasig) - 941,68 €</option>
+                            <option value="6000" data-price="654.73">SUN2000-6KTL-L1 (6kW, hybrid, 1-phasig) - 654,73 €</option>
+                            <option value="6000" data-price="718.75">SUN2000-6KTL-M1-HC (6kW, hybrid, 3-phasig, high-current) - 718,75 €</option>
+                            <option value="8000" data-price="1102.77">SUN2000-8K-MAP0 (8kW, hybrid, 3-phasig) - 1102,77 €</option>
+                            <option value="8000" data-price="1057.00">SUN2000-8KTL-LC0 (8kW, hybrid, 1-phasig) - 1057,00 €</option>
+                            <option value="8000" data-price="719.99">SUN2000-8KTL-M1-HC (8kW, hybrid, 3-phasig, high-current) - 719,99 €</option>
+                            <option value="12000" data-price="1280.74">SUN5000-12K-MAP0 (12kW, hybrid, 3-phasig, benötigt Optimierung) - 1280,74 €</option>
+                            <option value="8000" data-price="961.58">SUN5000-8K-MAP0 (8kW, hybrid, 3-phasig, benötigt Optimierung) - 961,58 €</option>
+                            <option value="12000" data-price="1090.47">SUN2000-12KTL-M2-HC (12kW, on-grid, 3-phasig, high-current) - 1090,47 €</option>
+                            <option value="2000" data-price="328.26">SUN2000-2KTL-L1 (2kW, hybrid, 1-phasig) - 328,26 €</option>
+                            <option value="3680" data-price="663.00">SUN2000-3,68K-LB0 (3,68kW, hybrid, 1-phasig) - 663,00 €</option>
+                            <option value="3680" data-price="508.86">SUN2000-3,68KTL-L1 (3,68kW, hybrid, 1-phasig) - 508,86 €</option>
+                            <option value="3000" data-price="567.00">SUN2000-3K-LB0 (3kW, hybrid, 1-phasig) - 567,00 €</option>
+                            <option value="3000" data-price="402.62">SUN2000-3KTL-L1 (3kW, hybrid, 1-phasig) - 402,62 €</option>
+                            <option value="4000" data-price="695.00">SUN2000-4K-LB0 (4kW, hybrid, 1-phasig) - 695,00 €</option>
+                            <option value="5000" data-price="759.00">SUN2000-5K-LB0 (5kW, hybrid, 1-phasig) - 759,00 €</option>
+                            <option value="6000" data-price="855.00">SUN2000-6K-LB0 (6kW, hybrid, 1-phasig) - 855,00 €</option>
+                            <option value="100000" data-price="3704.35">SUN2000-100KTL-M2 (100kW, on-grid, 3-phasig) - 3704,35 €</option>
+                            <option value="115000" data-price="3712.85">SUN2000-115KTL-M2 (115kW, on-grid, 3-phasig) - 3712,85 €</option>
+                            <option value="17000" data-price="1788.00">SUN2000-17KTL-M2 (17kW, on-grid, 3-phasig) - 1788,00 €</option>
+                            <option value="185000" data-price="4351.31">SUN2000-185KTL-H1 (185kW, on-grid, 3-phasig) - 4351,31 €</option>
+                            <option value="215000" data-price="5417.89">SUN2000-215KTL-H0 (215kW, on-grid, 3-phasig) - 5417,89 €</option>
+                            <option value="30000" data-price="1874.00">SUN2000-30KTL-M3 (30kW, on-grid, 3-phasig) - 1874,00 €</option>
+                            <option value="330000" data-price="7383.20">SUN2000-330KTL-H1 (330kW, on-grid, 3-phasig) - 7383,20 €</option>
+                            <option value="36000" data-price="2139.00">SUN2000-36KTL-M3 (36kW, on-grid, 3-phasig) - 2139,00 €</option>
+                            <option value="40000" data-price="2255.00">SUN2000-40KTL-M3 (40kW, on-grid, 3-phasig) - 2255,00 €</option>
+                            <option value="50000" data-price="2311.58">SUN2000-50KTL-M3 (50kW, on-grid, 3-phasig) - 2311,58 €</option>
+                            <option value="1" data-price="265.58">EMMA-A02 (Energy Management Assistant) - 265,58 €</option>
                         </select>
                     </div>
                     <div>
@@ -122,41 +160,59 @@
                         <input type="number" id="inverterPrice" value="849.48" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
                     </div>
                 </div>
-                 <div class="mt-4 grid md:grid-cols-4 gap-4">
+                <div class="mt-4 grid md:grid-cols-4 gap-4">
                     <div>
-                        <label for="inverterTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
-                        <input type="number" id="inverterTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <label for="inverterShipmentType" class="block text-sm font-medium text-gray-700">Versandart</label>
+                        <select id="inverterShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                            <option value="pallet">Europalette</option>
+                            <option value="package">Paket</option>
+                        </select>
                     </div>
                     <div>
-                        <label for="inverterTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
-                        <input type="number" id="inverterTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <label for="inverterTransportCount" class="block text-sm font-medium text-gray-700">Menge</label>
+                        <input type="number" id="inverterTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" oninput="updateInverterTransportTotal()">
+                    </div>
+                    <div>
+                        <label for="inverterTransportPrice" class="block text-sm font-medium text-gray-700">Preis pro Einheit (€)</label>
+                        <input type="number" id="inverterTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" oninput="updateInverterTransportTotal()">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Gesamt (€)</label>
-                        <input type="text" id="inverterTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100" readonly>
+                        <input type="text" id="inverterTransportTotal" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100" readonly>
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Battery Section -->
-            <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 3.363-2.73 6.093-6.093 6.093h-.758v1.365c0 1.258-.87 2.308-2.008 2.531a2.383 2.383 0 01-2.083-2.327l.006-.173V12.75H4.125c-3.363 0-6.093-2.73-6.093-6.093S.762.282 4.125.282h12.031c3.363 0 6.093 2.73 6.093 6.093zm-5.625 2.25v-3.75h-8.25v3.75h8.25zM12.375 14.25v-1.5h-1.5v1.5h1.5z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12.375 14.25v-1.5h-1.5v1.5h1.5z" transform="rotate(90 12.375 14.25)" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 3.363-2.73 6.093-6.093 6.093h-.758v1.365c0 1.258-.87 2.308-2.008 2.531a2.383 2.383 0 01-2.083-2.327l.006-.173V12.75H4.125c-3.363 0-6.093-2.73-6.093-6.093S.762.282 4.125.282h12.031c3.363 0 6.093 2.73 6.093 6.093zm-5.625 2.25v-3.75h-8.25v3.75h8.25zM12.375 14.25v-1.5h-1.5v1.5h1.5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12.375 14.25v-1.5h-1.5v1.5h1.5z" transform="rotate(90 12.375 14.25)" />
+                    </svg>
                     Speicher (Optional)
                 </h2>
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label for="batteryModel" class="block text-sm font-medium text-gray-700">Modell</label>
-                        <select id="batteryModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
-                           <option value="5000" data-price="1598.00">Huawei LUNA2000-5-E0 (Batteriemodul 5kWh) - 1598,00 €</option>
-                           <option value="7000" data-price="2229.00">Huawei LUNA2000-7-E1 (Batteriemodul 6,9KWh) - 2229,00 €</option>
-                           <option value="5000" data-price="2197.00">SET LUNA2000-5KW-C0/LUNA2000-5-E0 (Steuermodul + 1) - 2197,00 €</option>
-                           <option value="10000" data-price="3767.00">SET LUNA2000-5KW-C0/LUNA2000-5-E0/LUNA2000-5-E0 (Steuermodul + 2) - 3767,00 €</option>
-                           <option value="15000" data-price="5337.00">SET LUNA2000-5KW-C0/LUNA2000-5-E0/LUNA2000-5-E0/LUNA2000-5-E0 (Steuermodul + 3) - 5337,00 €</option>
+                        <select id="batteryModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" onchange="updateBatteryPrice()">
+                            <option value="5000" data-price="1598.00">Huawei LUNA2000-5-E0 (Batteriemodul 5kWh) - 1598,00 €</option>
+                            <option value="7000" data-price="2229.00">Huawei LUNA2000-7-E1 (Batteriemodul 6,9KWh) - 2229,00 €</option>
+                            <option value="10000" data-price="1057.00">Huawei LUNA2000-10-E0 (10kWh) - 1057,00 €</option>
+                            <option value="14000" data-price="2139.00">Huawei LUNA2000-14-S1 (14kWh) - 2139,00 €</option>
+                            <option value="15000" data-price="1788.00">Huawei LUNA2000-15-S0 (15kWh) - 1788,00 €</option>
+                            <option value="21000" data-price="4351.31">Huawei LUNA2000-21-S1 (21kWh) - 4351,31 €</option>
+                            <option value="5000" data-price="2197.00" data-is-set="true">SET LUNA2000-5KW-C0/LUNA2000-5-E0 (Steuermodul + 1 Batteriemodul) - 2197,00 €</option>
+                            <option value="10000" data-price="3767.00" data-is-set="true">SET LUNA2000-5KW-C0/LUNA2000-5-E0/LUNA2000-5-E0 (Steuermodul + 2 Batteriemodule) - 3767,00 €</option>
+                            <option value="15000" data-price="5337.00" data-is-set="true">SET LUNA2000-5KW-C0/LUNA2000-5-E0/LUNA2000-5-E0/LUNA2000-5-E0 (Steuermodul + 3 Batteriemodule) - 5337,00 €</option>
+                            <option value="129000" data-price="50471.64">LUNA2000-129KWH-2H1 (Speicher 129KWh) - 50471,64 €</option>
+                            <option value="161000" data-price="57618.00">LUNA2000-161KWH-2H1 (Speicher 161KWh) - 57618,00 €</option>
+                            <option value="200000" data-price="64765.44">LUNA2000-200KWH-2H1 (Speicher 200KWh) - 64765,44 €</option>
+                            <option value="97000" data-price="40084.20">LUNA2000-97KWH-2H1 (Speicher 97KWh) - 40084,20 €</option>
                         </select>
                     </div>
                     <div>
-                        <label for="batteryCount" class="block text-sm font-medium text-gray-700">Anzahl</label>
+                        <label for="batteryCount">Anzahl</label>
                         <input type="number" id="batteryCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
                     </div>
                     <div>
@@ -167,7 +223,7 @@
                 <div class="mt-4 grid md:grid-cols-2 gap-4">
                     <div>
                         <label for="bmsModel" class="block text-sm font-medium text-gray-700">BMS-Modell</label>
-                        <select id="bmsModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <select id="bmsModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" onchange="updateBmsPrice()">
                             <option value="0" data-price="0">Kein BMS</option>
                             <option value="10000" data-price="799.00">Huawei LUNA2000-10KW-C1 (10 kW Steuermodul) - 799,00 €</option>
                             <option value="5000" data-price="629.00" selected>Huawei LUNA2000-5KW-C0 (5 kW Steuermodul) - 629,00 €</option>
@@ -180,24 +236,34 @@
                 </div>
                 <div class="mt-4 grid md:grid-cols-4 gap-4">
                     <div>
-                        <label for="batteryTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
-                        <input type="number" id="batteryTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <label for="batteryShipmentType" class="block text-sm font-medium text-gray-700">Versandart</label>
+                        <select id="batteryShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                            <option value="pallet">Europalette</option>
+                            <option value="package">Paket</option>
+                        </select>
                     </div>
                     <div>
-                        <label for="batteryTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
-                        <input type="number" id="batteryTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
+                        <label for="batteryTransportCount" class="block text-sm font-medium text-gray-700">Menge</label>
+                        <input type="number" id="batteryTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" oninput="updateBatteryTransportTotal()">
+                    </div>
+                    <div>
+                        <label for="batteryTransportPrice" class="block text-sm font-medium text-gray-700">Preis pro Einheit (€)</label>
+                        <input type="number" id="batteryTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" oninput="updateBatteryTransportTotal()">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Gesamt (€)</label>
-                        <input type="text" id="batteryTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100" readonly>
+                        <input type="text" id="batteryTransportTotal" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100" readonly>
                     </div>
                 </div>
-            </section>
+            </div>
 
-             <!-- Other Costs Section -->
-            <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <!-- Other Costs Section -->
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                     Verschiedene Kosten
                 </h2>
                 <div class="grid md:grid-cols-2 gap-4">
@@ -214,316 +280,461 @@
                         <input type="number" id="laborCost" value="0.25" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
                     </div>
                     <div>
-                        <label for="otherFixedCosts" class="block text-sm font-medium text-gray-700">Sonstige Fixkosten (€)</label>
+                        <label for="otherFixedCosts" class="block text-sm font-medium text-gray-700">Sonstige Fixkosten (€) (z.B. Genehmigungen, Logistik)</label>
                         <input type="number" id="otherFixedCosts" value="500" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
                     </div>
                 </div>
+                
+                <!-- New section for additional costs -->
                 <div class="mt-6 space-y-4">
                     <h3 class="text-xl font-semibold text-gray-700">Zusätzliche Kosten</h3>
-                    <div id="additionalCostsContainer"></div>
-                    <button type="button" id="addCostButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">
+                    <!-- A container for dynamic fields -->
+                    <div id="additionalCostsContainer">
+                         <!-- Dynamically generated fields will go here -->
+                    </div>
+                    <button type="button" onclick="addAdditionalCostField()" class="text-sm text-green-600 hover:text-green-800 transition-colors">
                         + Weiteren Kostenpunkt hinzufügen
                     </button>
                 </div>
-            </section>
+            </div>
 
             <!-- Final Price Calculation Method -->
-            <section class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 110-18 9 9 0 010 18z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 12c.966 0 1.905.212 2.753.627A5.992 5.992 0 0012 17.5a5.992 5.992 0 00-2.753-4.873A3.001 3.001 0 0112 12z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 110-18 9 9 0 010 18z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 12c.966 0 1.905.212 2.753.627A5.992 5.992 0 0012 17.5a5.992 5.992 0 00-2.753-4.873A3.001 3.001 0 0112 12z" />
+                    </svg>
                     Endpreis-Berechnung
                 </h2>
                 <div class="flex items-center space-x-4 mb-4">
                     <div class="flex items-center">
-                        <input type="checkbox" id="useProfitMargin" name="calculationMethod" value="profit" checked class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
-                        <label for="useProfitMargin" class="ml-2 block text-sm font-medium text-gray-700">Gewinnspanne</label>
+                        <input type="checkbox" id="useProfitMargin" name="calculationMethod" value="profit" checked class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500" onchange="toggleCalculationMethod(this)">
+                        <label for="useProfitMargin" class="ml-2 block text-sm font-medium text-gray-700">
+                            Berechnung mit Gewinnspanne
+                        </label>
                     </div>
                     <div class="flex items-center">
-                        <input type="checkbox" id="useFixedPrice" name="calculationMethod" value="fixed" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
-                        <label for="useFixedPrice" class="ml-2 block text-sm font-medium text-gray-700">Festpreis pro kWp</label>
+                        <input type="checkbox" id="useFixedPrice" name="calculationMethod" value="fixed" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500" onchange="toggleCalculationMethod(this)">
+                        <label for="useFixedPrice" class="ml-2 block text-sm font-medium text-gray-700">
+                            Festpreis pro kWp festlegen
+                        </label>
                     </div>
                 </div>
+
                 <div id="profitMarginDiv">
                     <label for="profitMargin" class="block text-sm font-medium text-gray-700">Gewünschte Gewinnspanne (%)</label>
                     <input type="number" id="profitMargin" value="20" min="0" step="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
                 </div>
+
                 <div id="fixedPriceDiv" class="hidden">
                     <label for="fixedPricePerKwp" class="block text-sm font-medium text-gray-700">Festpreis (€/kWp)</label>
                     <input type="number" id="fixedPricePerKwp" value="1300" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
                 </div>
-            </section>
+            </div>
 
             <div class="flex justify-center">
-                <button type="button" id="calculateButton" class="w-full md:w-auto px-8 py-4 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition-colors font-bold text-lg">
+                <button type="button" onclick="calculateCosts()" class="w-full md:w-auto px-8 py-4 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition-colors font-bold text-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                     Kosten berechnen
                 </button>
             </div>
         </form>
 
         <!-- Results Section -->
-        <section id="results" class="mt-10 hidden">
+        <div id="results" class="results-section mt-10 hidden">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Kostenaufstellung</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-sm">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Komponente</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Gesamtkosten (€)</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Kosten pro Wp (€/Wp)</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Komponente
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Gesamtkosten (€)
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Kosten pro Wp (€/Wp)
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Gesamtanlagenleistung</td>
-                            <td id="result-totalPower" colspan="2" class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">0 Wp</td>
+                            <td id="totalPower" colspan="2" class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">0 Wp</td>
                         </tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900">Module (Materialien)</td><td id="result-panelsCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-panelsCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900">Wechselrichter (Materialien)</td><td id="result-inverterCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-inverterCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900">Batteriemodule & BMS</td><td id="result-batteryCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-batteryCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900">Montagestruktur</td><td id="result-constructionTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-constructionUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900">Zubehör</td><td id="result-accessoriesTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-accessoriesUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900">Arbeitskosten</td><td id="result-laborTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-laborUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900">Sonstige Fixkosten</td><td id="result-otherFixedTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-otherFixedUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm font-bold text-gray-900">Zusätzliche Kosten</td><td id="result-additionalCostsTotal" class="px-6 py-4 text-right font-bold text-sm text-gray-500">0.00</td><td id="result-additionalCostsPerWp" class="px-6 py-4 text-right font-bold text-sm text-gray-500">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Module</td><td id="result-panelTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-panelTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Wechselrichter</td><td id="result-inverterTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-inverterTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-                        <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Speicher</td><td id="result-batteryTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-batteryTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-                        <tr class="bg-gray-100 font-bold"><td class="px-6 py-4 text-base text-gray-900">GESAMTE EPC-KOSTEN</td><td id="result-totalEPCCost" class="px-6 py-4 text-right text-base text-gray-900">0.00</td><td id="result-totalEPCCostPerWp" class="px-6 py-4 text-right text-base text-gray-900">0.00</td></tr>
-                        <tr class="bg-green-100 font-bold text-green-800 text-lg"><td class="px-6 py-4">ENDPREIS FÜR KUNDEN</td><td id="result-finalClientPrice" colspan="2" class="px-6 py-4 text-right">0.00</td></tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Module (Materialien)</td>
+                            <td id="panelsCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                            <td id="panelsCostPerWp" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Wechselrichter (Materialien)</td>
+                            <td id="inverterCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                            <td id="inverterCostPerWp" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Batteriemodule & BMS</td>
+                            <td id="batteryCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                            <td id="batteryCostPerWp" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Montagestruktur</td>
+                            <td id="constructionTotalCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                            <td id="constructionUnitCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                        </tr>
+                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Zubehör</td>
+                            <td id="accessoriesTotalCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                            <td id="accessoriesUnitCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Arbeitskosten</td>
+                            <td id="laborTotalCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                            <td id="laborUnitCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Sonstige Fixkosten</td>
+                            <td id="otherFixedTotalCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                            <td id="otherFixedUnitCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">0.00</td>
+                        </tr>
+                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">Zusätzliche Kosten</td>
+                            <td id="additionalCostsTotal" class="px-6 py-4 whitespace-nowrap text-right font-bold text-sm text-gray-500">0.00</td>
+                            <td id="additionalCostsPerWp" class="px-6 py-4 whitespace-nowrap text-right font-bold text-sm text-gray-500">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">Transport Module</td>
+                            <td id="panelTransportTotal" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500 font-bold">0.00</td>
+                            <td id="panelTransportUnitCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500 font-bold">0.00</td>
+                        </tr>
+                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">Transport Wechselrichter</td>
+                            <td id="inverterTransportTotal" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500 font-bold">0.00</td>
+                            <td id="inverterTransportUnitCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500 font-bold">0.00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">Transport Speicher</td>
+                            <td id="batteryTransportTotal" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500 font-bold">0.00</td>
+                            <td id="batteryTransportUnitCost" class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500 font-bold">0.00</td>
+                        </tr>
+                        <tr class="bg-gray-100 font-bold">
+                            <td class="px-6 py-4 whitespace-nowrap text-base text-gray-900">GESAMTE EPC-KOSTEN</td>
+                            <td id="totalEPCSum" class="px-6 py-4 whitespace-nowrap text-right text-base text-gray-900">0.00</td>
+                            <td id="totalEPCSumPerWp" class="px-6 py-4 whitespace-nowrap text-right text-base text-gray-900">0.00</td>
+                        </tr>
+                        <tr class="bg-green-100 font-bold text-green-800 text-lg">
+                            <td class="px-6 py-4 whitespace-nowrap">ENDPREIS FÜR KUNDEN</td>
+                            <td id="finalClientPrice" colspan="2" class="px-6 py-4 whitespace-nowrap text-right">0.00</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-        </section>
+        </div>
     </div>
 
     <script>
-        // Wait until the DOM is fully loaded before running scripts
-        document.addEventListener('DOMContentLoaded', () => {
+        // Funktion, um den Preis beim Wechsel des Panel-Modells zu aktualisieren
+        function updatePanelPrice() {
+            const select = document.getElementById('panelModel');
+            const priceInput = document.getElementById('panelPrice');
+            const selectedOption = select.options[select.selectedIndex];
             
-            // --- Helper Functions ---
+            // Prüfen, ob die ausgewählte Option ein data-price-Attribut hat
+            if (selectedOption.hasAttribute('data-price')) {
+                priceInput.value = parseFloat(selectedOption.getAttribute('data-price')).toFixed(2);
+            } else {
+                 // Einen Standardpreis setzen, falls kein data-price verfügbar ist
+                priceInput.value = 46.99;
+            }
+        }
+        
+        // Funktion, um den Preis beim Wechsel des Wechselrichter-Modells zu aktualisieren
+        function updateInverterPrice() {
+            const select = document.getElementById('inverterModel');
+            const priceInput = document.getElementById('inverterPrice');
+            const selectedOption = select.options[select.selectedIndex];
+            
+            // Prüfen, ob die ausgewählte Option ein data-price-Attribut hat
+            if (selectedOption.hasAttribute('data-price')) {
+                priceInput.value = parseFloat(selectedOption.getAttribute('data-price')).toFixed(2);
+            } else {
+                 // Einen Standardpreis setzen, falls kein data-price verfügbar ist
+                priceInput.value = 849.48;
+            }
+        }
 
-            // Single function to update price from any select element's data-price attribute
-            const updatePriceFromSelect = (selectId, priceInputId, defaultPrice) => {
-                const select = document.getElementById(selectId);
-                const priceInput = document.getElementById(priceInputId);
-                if (!select || !priceInput) return;
+        // Funktion, um den Preis beim Wechsel des Batterie-Modells zu aktualisieren
+        function updateBatteryPrice() {
+            const select = document.getElementById('batteryModel');
+            const priceInput = document.getElementById('batteryPrice');
+            const selectedOption = select.options[select.selectedIndex];
+            
+            // Prüfen, ob die ausgewählte Option ein data-price-Attribut hat
+            if (selectedOption.hasAttribute('data-price')) {
+                priceInput.value = parseFloat(selectedOption.getAttribute('data-price')).toFixed(2);
+            } else {
+                 // Einen Standardpreis setzen, falls kein data-price verfügbar ist
+                priceInput.value = 1598.00;
+            }
+        }
+
+        // Funktion, um den BMS-Preis beim Wechsel des BMS-Modells zu aktualisieren
+        function updateBmsPrice() {
+            const select = document.getElementById('bmsModel');
+            const priceInput = document.getElementById('bmsPrice');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption.hasAttribute('data-price')) {
+                priceInput.value = parseFloat(selectedOption.getAttribute('data-price')).toFixed(2);
+            } else {
+                priceInput.value = 0;
+            }
+        }
+        
+        // Funktion zur Aktualisierung des Gesamtpreises für den Modul-Transport
+        function updatePanelTransportTotal() {
+            const transportCount = parseFloat(document.getElementById('panelTransportCount').value) || 0;
+            const transportPrice = parseFloat(document.getElementById('panelTransportPrice').value) || 0;
+            const total = (transportCount * transportPrice).toFixed(2);
+            document.getElementById('panelTransportTotal').value = total;
+        }
+
+        // Funktion zur Aktualisierung des Gesamtpreises für den Wechselrichter-Transport
+        function updateInverterTransportTotal() {
+            const transportCount = parseFloat(document.getElementById('inverterTransportCount').value) || 0;
+            const transportPrice = parseFloat(document.getElementById('inverterTransportPrice').value) || 0;
+            const total = (transportCount * transportPrice).toFixed(2);
+            document.getElementById('inverterTransportTotal').value = total;
+        }
+
+        // Funktion zur Aktualisierung des Gesamtpreises für den Batterie-Transport
+        function updateBatteryTransportTotal() {
+            const transportCount = parseFloat(document.getElementById('batteryTransportCount').value) || 0;
+            const transportPrice = parseFloat(document.getElementById('batteryTransportPrice').value) || 0;
+            const total = (transportCount * transportPrice).toFixed(2);
+            document.getElementById('batteryTransportTotal').value = total;
+        }
+
+
+        // Funktion zum Erstellen und Hinzufügen zusätzlicher Kostenfelder
+        function addAdditionalCostField() {
+            const container = document.getElementById('additionalCostsContainer');
+            const index = container.children.length;
+
+            if (index >= 10) {
+                // Das Hinzufügen von mehr als 10 Feldern verhindern
+                return;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'grid md:grid-cols-4 gap-2 border-t border-slate-200 pt-4';
+            div.innerHTML = `
+                <div>
+                    <label for="addCostDesc_${index}" class="block text-sm font-medium text-gray-700">Beschreibung</label>
+                    <input type="text" id="addCostDesc_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="z.B. Überwachung">
+                </div>
+                <div>
+                    <label for="addCostType_${index}" class="block text-sm font-medium text-gray-700">Kostenart</label>
+                    <select id="addCostType_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                        <option value="perWp">pro Wp (€)</option>
+                        <option value="perPiece">pro Stück (€)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="addCostQty_${index}" class="block text-sm font-medium text-gray-700">Menge</label>
+                    <input type="number" id="addCostQty_${index}" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+                <div>
+                    <label for="addCostPrice_${index}" class="block text-sm font-medium text-gray-700">Preis</label>
+                    <input type="number" id="addCostPrice_${index}" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        // 5 anfängliche Felder hinzufügen
+        for(let i = 0; i < 5; i++) {
+             addAdditionalCostField();
+        }
+
+        function calculateCosts() {
+            // Eingabewerte abrufen, fehlerhafte numerische Eingaben elegant behandeln
+            const panelModel = parseFloat(document.getElementById('panelModel').value) || 0;
+            const panelCount = parseFloat(document.getElementById('panelCount').value) || 0;
+            const panelPrice = parseFloat(document.getElementById('panelPrice').value) || 0;
+            const panelTransportTotal = parseFloat(document.getElementById('panelTransportTotal').value) || 0;
+
+            const inverterCount = parseFloat(document.getElementById('inverterCount').value) || 0;
+            const inverterPrice = parseFloat(document.getElementById('inverterPrice').value) || 0;
+            const inverterTransportTotal = parseFloat(document.getElementById('inverterTransportTotal').value) || 0;
+
+            const batteryCount = parseFloat(document.getElementById('batteryCount').value) || 0;
+            const batteryPrice = parseFloat(document.getElementById('batteryPrice').value) || 0;
+            const bmsCount = parseFloat(document.getElementById('bmsCount').value) || 0;
+            const bmsPrice = parseFloat(document.getElementById('bmsPrice').value) || 0;
+            const batteryTransportTotal = parseFloat(document.getElementById('batteryTransportTotal').value) || 0;
+
+            const constructionCostPerWp = parseFloat(document.getElementById('constructionCost').value) || 0;
+            const accessoriesCostPerWp = parseFloat(document.getElementById('accessoriesCost').value) || 0;
+            const laborCostPerWp = parseFloat(document.getElementById('laborCost').value) || 0;
+            const otherFixedCosts = parseFloat(document.getElementById('otherFixedCosts').value) || 0;
+
+            const useProfitMargin = document.getElementById('useProfitMargin').checked;
+            const useFixedPrice = document.getElementById('useFixedPrice').checked;
+
+            let finalClientPrice = 0;
+            
+            // Berechnungen durchführen
+            const totalPowerWp = panelCount * panelModel;
+            const totalPowerKwp = totalPowerWp / 1000;
+
+            const panelsTotalCost = panelCount * panelPrice;
+            const inverterTotalCost = inverterCount * inverterPrice;
+            const batteryTotalCost = (batteryCount * batteryPrice) + (bmsCount * bmsPrice);
+            
+            const constructionTotalCost = totalPowerWp * constructionCostPerWp;
+            const accessoriesTotalCost = totalPowerWp * accessoriesCostPerWp;
+            const laborTotalCost = totalPowerWp * laborCostPerWp;
+
+            // Zusätzliche Kosten berechnen
+            let additionalCosts = 0;
+            const additionalCostFields = document.getElementById('additionalCostsContainer').children;
+            for (let i = 0; i < additionalCostFields.length; i++) {
+                const type = document.getElementById(`addCostType_${i}`).value;
+                const quantity = parseFloat(document.getElementById(`addCostQty_${i}`).value) || 0;
+                const price = parseFloat(document.getElementById(`addCostPrice_${i}`).value) || 0;
                 
-                const selectedOption = select.options[select.selectedIndex];
-                const price = selectedOption.dataset.price || defaultPrice;
-                priceInput.value = parseFloat(price).toFixed(2);
-            };
-
-            // Single function to update transport total display fields
-            const updateTransportTotal = (countId, priceId, totalDisplayId) => {
-                const count = parseFloat(document.getElementById(countId).value) || 0;
-                const price = parseFloat(document.getElementById(priceId).value) || 0;
-                document.getElementById(totalDisplayId).value = (count * price).toFixed(2);
-            };
-
-            // Function to add a new row for additional costs
-            const addAdditionalCostField = () => {
-                const container = document.getElementById('additionalCostsContainer');
-                const index = container.children.length;
-                if (index >= 10) return; // Limit to 10 fields
-
-                const div = document.createElement('div');
-                div.className = 'grid md:grid-cols-4 gap-2 border-t border-slate-200 pt-4';
-                div.innerHTML = `
-                    <div>
-                        <label for="addCostDesc_${index}" class="block text-sm font-medium text-gray-700">Beschreibung</label>
-                        <input type="text" id="addCostDesc_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="z.B. Überwachung">
-                    </div>
-                    <div>
-                        <label for="addCostType_${index}" class="block text-sm font-medium text-gray-700">Kostenart</label>
-                        <select id="addCostType_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-                            <option value="perWp">pro Wp (€)</option>
-                            <option value="perPiece">pro Stück (€)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="addCostQty_${index}" class="block text-sm font-medium text-gray-700">Menge</label>
-                        <input type="number" id="addCostQty_${index}" value="1" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-                    </div>
-                    <div>
-                        <label for="addCostPrice_${index}" class="block text-sm font-medium text-gray-700">Preis</label>
-                        <input type="number" id="addCostPrice_${index}" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-                    </div>
-                `;
-                container.appendChild(div);
-            };
-
-            // Main calculation function
-            const calculateCosts = () => {
-                // Get values from input fields, default to 0 if invalid
-                const panelModel = parseFloat(document.getElementById('panelModel').value) || 0;
-                const panelCount = parseFloat(document.getElementById('panelCount').value) || 0;
-                const panelPrice = parseFloat(document.getElementById('panelPrice').value) || 0;
-                const panelTransportTotal = (parseFloat(document.getElementById('panelTransportCount').value) || 0) * (parseFloat(document.getElementById('panelTransportPrice').value) || 0);
-
-                const inverterCount = parseFloat(document.getElementById('inverterCount').value) || 0;
-                const inverterPrice = parseFloat(document.getElementById('inverterPrice').value) || 0;
-                const inverterTransportTotal = (parseFloat(document.getElementById('inverterTransportCount').value) || 0) * (parseFloat(document.getElementById('inverterTransportPrice').value) || 0);
-
-                const batteryCount = parseFloat(document.getElementById('batteryCount').value) || 0;
-                const batteryPrice = parseFloat(document.getElementById('batteryPrice').value) || 0;
-                const bmsPrice = parseFloat(document.getElementById('bmsPrice').value) || 0;
-                const batteryTransportTotal = (parseFloat(document.getElementById('batteryTransportCount').value) || 0) * (parseFloat(document.getElementById('batteryTransportPrice').value) || 0);
-
-                const constructionCostPerWp = parseFloat(document.getElementById('constructionCost').value) || 0;
-                const accessoriesCostPerWp = parseFloat(document.getElementById('accessoriesCost').value) || 0;
-                const laborCostPerWp = parseFloat(document.getElementById('laborCost').value) || 0;
-                const otherFixedCosts = parseFloat(document.getElementById('otherFixedCosts').value) || 0;
-                
-                const totalPowerWp = panelCount * panelModel;
-                const totalPowerKwp = totalPowerWp / 1000;
-
-                const panelsTotalCost = panelCount * panelPrice;
-                const inverterTotalCost = inverterCount * inverterPrice;
-                // Add BMS price only if at least one battery is selected
-                const batteryTotalCost = (batteryCount * batteryPrice) + (batteryCount > 0 ? bmsPrice : 0);
-
-                const constructionTotalCost = totalPowerWp * constructionCostPerWp;
-                const accessoriesTotalCost = totalPowerWp * accessoriesCostPerWp;
-                const laborTotalCost = totalPowerWp * laborCostPerWp;
-
-                // Calculate sum of all dynamically added costs
-                let additionalCosts = 0;
-                const additionalCostFields = document.getElementById('additionalCostsContainer').children;
-                for (let i = 0; i < additionalCostFields.length; i++) {
-                    const type = document.getElementById(`addCostType_${i}`).value;
-                    const quantity = parseFloat(document.getElementById(`addCostQty_${i}`).value) || 0;
-                    const price = parseFloat(document.getElementById(`addCostPrice_${i}`).value) || 0;
-                    
-                    if (type === 'perWp') {
-                        additionalCosts += (price * totalPowerWp);
-                    } else if (type === 'perPiece') {
-                        additionalCosts += (quantity * price);
-                    }
+                if (type === 'perWp') {
+                    additionalCosts += (price * totalPowerWp);
+                } else if (type === 'perPiece') {
+                    additionalCosts += (quantity * price);
                 }
+            }
 
-                const transportTotalCost = panelTransportTotal + inverterTransportTotal + batteryTransportTotal;
-                
-                const totalEPCCost = panelsTotalCost + inverterTotalCost + batteryTotalCost + constructionTotalCost + accessoriesTotalCost + laborTotalCost + otherFixedCosts + additionalCosts + transportTotalCost;
-                
-                // Calculate final price based on selected method
-                let finalClientPrice = 0;
-                if (document.getElementById('useProfitMargin').checked) {
-                    const profitMargin = parseFloat(document.getElementById('profitMargin').value) / 100 || 0;
-                    finalClientPrice = totalEPCCost * (1 + profitMargin);
-                } else if (document.getElementById('useFixedPrice').checked) {
-                    const fixedPricePerKwp = parseFloat(document.getElementById('fixedPricePerKwp').value) || 0;
-                    finalClientPrice = totalPowerKwp * fixedPricePerKwp;
-                }
+            const transportTotalCost = panelTransportTotal + inverterTransportTotal + batteryTransportTotal;
 
-                // --- Update Results Table ---
-                // Helper to safely divide and format numbers, avoiding division by zero
-                const safeDiv = (numerator, denominator) => (denominator > 0 ? (numerator / denominator).toFixed(2) : '0.00');
 
-                document.getElementById('result-totalPower').innerText = `${totalPowerWp} Wp (${totalPowerKwp.toFixed(2)} kWp)`;
-                
-                document.getElementById('result-panelsCost').innerText = panelsTotalCost.toFixed(2);
-                document.getElementById('result-panelsCostPerWp').innerText = safeDiv(panelsTotalCost, totalPowerWp);
-                
-                document.getElementById('result-inverterCost').innerText = inverterTotalCost.toFixed(2);
-                document.getElementById('result-inverterCostPerWp').innerText = safeDiv(inverterTotalCost, totalPowerWp);
-
-                document.getElementById('result-batteryCost').innerText = batteryTotalCost.toFixed(2);
-                document.getElementById('result-batteryCostPerWp').innerText = safeDiv(batteryTotalCost, totalPowerWp);
-
-                document.getElementById('result-constructionTotalCost').innerText = constructionTotalCost.toFixed(2);
-                document.getElementById('result-constructionUnitCost').innerText = constructionCostPerWp.toFixed(2);
-
-                document.getElementById('result-accessoriesTotalCost').innerText = accessoriesTotalCost.toFixed(2);
-                document.getElementById('result-accessoriesUnitCost').innerText = accessoriesCostPerWp.toFixed(2);
-
-                document.getElementById('result-laborTotalCost').innerText = laborTotalCost.toFixed(2);
-                document.getElementById('result-laborUnitCost').innerText = laborCostPerWp.toFixed(2);
-
-                document.getElementById('result-otherFixedTotalCost').innerText = otherFixedCosts.toFixed(2);
-                document.getElementById('result-otherFixedUnitCost').innerText = safeDiv(otherFixedCosts, totalPowerWp);
-
-                document.getElementById('result-additionalCostsTotal').innerText = additionalCosts.toFixed(2);
-                document.getElementById('result-additionalCostsPerWp').innerText = safeDiv(additionalCosts, totalPowerWp);
-
-                document.getElementById('result-panelTransportTotal').innerText = panelTransportTotal.toFixed(2);
-                document.getElementById('result-panelTransportUnitCost').innerText = safeDiv(panelTransportTotal, totalPowerWp);
-                
-                document.getElementById('result-inverterTransportTotal').innerText = inverterTransportTotal.toFixed(2);
-                document.getElementById('result-inverterTransportUnitCost').innerText = safeDiv(inverterTransportTotal, totalPowerWp);
-                
-                document.getElementById('result-batteryTransportTotal').innerText = batteryTransportTotal.toFixed(2);
-                document.getElementById('result-batteryTransportUnitCost').innerText = safeDiv(batteryTransportTotal, totalPowerWp);
-
-                document.getElementById('result-totalEPCCost').innerText = totalEPCCost.toFixed(2);
-                document.getElementById('result-totalEPCCostPerWp').innerText = safeDiv(totalEPCCost, totalPowerWp);
-                
-                document.getElementById('result-finalClientPrice').innerText = finalClientPrice.toFixed(2);
-                
-                // Make the results section visible
-                document.getElementById('results').classList.remove('hidden');
-            };
-
-            // --- Event Listeners ---
+            const totalEPCCost = panelsTotalCost + inverterTotalCost + batteryTotalCost + constructionTotalCost + accessoriesTotalCost + laborTotalCost + otherFixedCosts + additionalCosts + transportTotalCost;
             
-            // Auto-update prices when models change
-            document.getElementById('panelModel').addEventListener('change', () => updatePriceFromSelect('panelModel', 'panelPrice', 46.99));
-            document.getElementById('inverterModel').addEventListener('change', () => updatePriceFromSelect('inverterModel', 'inverterPrice', 849.48));
-            document.getElementById('batteryModel').addEventListener('change', () => updatePriceFromSelect('batteryModel', 'batteryPrice', 1598.00));
-            document.getElementById('bmsModel').addEventListener('change', () => updatePriceFromSelect('bmsModel', 'bmsPrice', 0));
-            
-            // Auto-update transport totals on input
-            ['panelTransportCount', 'panelTransportPrice'].forEach(id => {
-                document.getElementById(id).addEventListener('input', () => updateTransportTotal('panelTransportCount', 'panelTransportPrice', 'panelTransportTotalDisplay'));
-            });
-             ['inverterTransportCount', 'inverterTransportPrice'].forEach(id => {
-                document.getElementById(id).addEventListener('input', () => updateTransportTotal('inverterTransportCount', 'inverterTransportPrice', 'inverterTransportTotalDisplay'));
-            });
-             ['batteryTransportCount', 'batteryTransportPrice'].forEach(id => {
-                document.getElementById(id).addEventListener('input', () => updateTransportTotal('batteryTransportCount', 'batteryTransportPrice', 'batteryTransportTotalDisplay'));
-            });
+            // Endpreis basierend auf der ausgewählten Methode berechnen
+            if (useProfitMargin) {
+                const profitMargin = parseFloat(document.getElementById('profitMargin').value) / 100 || 0;
+                finalClientPrice = totalEPCCost * (1 + profitMargin);
+            } else if (useFixedPrice) {
+                const fixedPricePerKwp = parseFloat(document.getElementById('fixedPricePerKwp').value) || 0;
+                finalClientPrice = totalPowerKwp * fixedPricePerKwp;
+            } else {
+                 finalClientPrice = totalEPCCost;
+            }
 
-            // Handle toggling between profit margin and fixed price
+            // Division durch Null für Wp-Berechnungen behandeln
+            const panelsCostPerWp = totalPowerWp > 0 ? (panelsTotalCost / totalPowerWp) : 0;
+            const inverterCostPerWp = totalPowerWp > 0 ? (inverterTotalCost / totalPowerWp) : 0;
+            const batteryCostPerWp = totalPowerWp > 0 ? (batteryTotalCost / totalPowerWp) : 0;
+            const constructionUnitCost = totalPowerWp > 0 ? constructionCostPerWp : 0;
+            const accessoriesUnitCost = totalPowerWp > 0 ? accessoriesCostPerWp : 0;
+            const laborUnitCost = totalPowerWp > 0 ? laborCostPerWp : 0;
+            const otherFixedUnitCost = totalPowerWp > 0 ? (otherFixedCosts / totalPowerWp) : 0;
+            const additionalCostsPerWp = totalPowerWp > 0 ? (additionalCosts / totalPowerWp) : 0;
+            const transportUnitCost = totalPowerWp > 0 ? (transportTotalCost / totalPowerWp) : 0;
+            const totalEPCSumPerWp = totalPowerWp > 0 ? (totalEPCCost / totalPowerWp) : 0;
+
+            // Ergebnisse in der Tabelle anzeigen
+            document.getElementById('totalPower').innerText = `${totalPowerWp} Wp (${totalPowerKwp.toFixed(2)} kWp)`;
+            document.getElementById('panelsCost').innerText = panelsTotalCost.toFixed(2);
+            document.getElementById('panelsCostPerWp').innerText = panelsCostPerWp.toFixed(2);
+            document.getElementById('inverterCost').innerText = inverterTotalCost.toFixed(2);
+            document.getElementById('inverterCostPerWp').innerText = inverterCostPerWp.toFixed(2);
+            document.getElementById('batteryCost').innerText = batteryTotalCost.toFixed(2);
+            document.getElementById('batteryCostPerWp').innerText = batteryCostPerWp.toFixed(2);
+            document.getElementById('constructionTotalCost').innerText = constructionTotalCost.toFixed(2);
+            document.getElementById('constructionUnitCost').innerText = constructionUnitCost.toFixed(2);
+            document.getElementById('accessoriesTotalCost').innerText = accessoriesTotalCost.toFixed(2);
+            document.getElementById('accessoriesUnitCost').innerText = accessoriesUnitCost.toFixed(2);
+            document.getElementById('laborTotalCost').innerText = laborTotalCost.toFixed(2);
+            document.getElementById('laborUnitCost').innerText = laborUnitCost.toFixed(2);
+            document.getElementById('otherFixedTotalCost').innerText = otherFixedTotalCost.toFixed(2);
+            document.getElementById('otherFixedUnitCost').innerText = otherFixedUnitCost.toFixed(2);
+            document.getElementById('additionalCostsTotal').innerText = additionalCosts.toFixed(2);
+            document.getElementById('additionalCostsPerWp').innerText = additionalCostsPerWp.toFixed(2);
+            document.getElementById('transportTotalCost').innerText = transportTotalCost.toFixed(2);
+            document.getElementById('transportUnitCost').innerText = transportUnitCost.toFixed(2);
+            document.getElementById('totalEPCSum').innerText = totalEPCSum.toFixed(2);
+            document.getElementById('totalEPCSumPerWp').innerText = totalEPCSumPerWp.toFixed(2);
+            document.getElementById('finalClientPrice').innerText = finalClientPrice.toFixed(2);
+
+            // Ergebnisse-Sektion anzeigen
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        // Funktion zur Handhabung der Checkbox-Logik
+        function toggleCalculationMethod(selectedCheckbox) {
             const useProfitMargin = document.getElementById('useProfitMargin');
             const useFixedPrice = document.getElementById('useFixedPrice');
             const profitMarginDiv = document.getElementById('profitMarginDiv');
             const fixedPriceDiv = document.getElementById('fixedPriceDiv');
 
-            useProfitMargin.addEventListener('change', () => {
+            if (selectedCheckbox === useProfitMargin) {
                 if (useProfitMargin.checked) {
                     useFixedPrice.checked = false;
                     profitMarginDiv.classList.remove('hidden');
                     fixedPriceDiv.classList.add('hidden');
                 } else {
-                    useProfitMargin.checked = true; // Prevent unchecking both
+                    useProfitMargin.checked = true;
                 }
-            });
-
-            useFixedPrice.addEventListener('change', () => {
+            } else if (selectedCheckbox === useFixedPrice) {
                 if (useFixedPrice.checked) {
                     useProfitMargin.checked = false;
                     fixedPriceDiv.classList.remove('hidden');
                     profitMarginDiv.classList.add('hidden');
                 } else {
-                    useFixedPrice.checked = true; // Prevent unchecking both
+                    useFixedPrice.checked = true;
                 }
-            });
-            
-            // Button click listeners
-            document.getElementById('calculateButton').addEventListener('click', calculateCosts);
-            document.getElementById('addCostButton').addEventListener('click', addAdditionalCostField);
-
-            // --- Initial Setup ---
-            
-            // Add 5 initial fields for additional costs on page load
-            for(let i = 0; i < 5; i++) {
-                 addAdditionalCostField();
             }
-            // Trigger initial price updates to sync inputs with default selections
-            updatePriceFromSelect('panelModel', 'panelPrice', 46.99);
-            updatePriceFromSelect('inverterModel', 'inverterPrice', 849.48);
-            updatePriceFromSelect('batteryModel', 'batteryPrice', 1598.00);
-            updatePriceFromSelect('bmsModel', 'bmsPrice', 0);
-        });
+        }
+
+        // Funktion zum Erstellen und Hinzufügen zusätzlicher Kostenfelder
+        function addAdditionalCostField() {
+            const container = document.getElementById('additionalCostsContainer');
+            const index = container.children.length;
+
+            if (index >= 10) {
+                // Das Hinzufügen von mehr als 10 Feldern verhindern
+                return;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'grid md:grid-cols-4 gap-2 border-t border-slate-200 pt-4';
+            div.innerHTML = `
+                <div>
+                    <label for="addCostDesc_${index}" class="block text-sm font-medium text-gray-700">Beschreibung</label>
+                    <input type="text" id="addCostDesc_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="z.B. Überwachung">
+                </div>
+                <div>
+                    <label for="addCostType_${index}" class="block text-sm font-medium text-gray-700">Kostenart</label>
+                    <select id="addCostType_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                        <option value="perWp">pro Wp (€)</option>
+                        <option value="perPiece">pro Stück (€)</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="addCostQty_${index}" class="block text-sm font-medium text-gray-700">Menge</label>
+                    <input type="number" id="addCostQty_${index}" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+                <div>
+                    <label for="addCostPrice_${index}" class="block text-sm font-medium text-gray-700">Preis</label>
+                    <input type="number" id="addCostPrice_${index}" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        // 5 anfängliche Felder hinzufügen
+        for(let i = 0; i < 5; i++) {
+             addAdditionalCostField();
+        }
     </script>
 </body>
 </html>
