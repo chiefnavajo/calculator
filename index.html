@@ -264,18 +264,6 @@
         const price = numVal(el(priceId));
         el(totalId).value = (count * price).toFixed(2);
       };
-
-      const updateTransportTotal = (containerId) => {
-          let total = 0;
-          qsa(`#${containerId} .shipment-row`).forEach(row => {
-              const count = numVal(qs('.shipment-count', row));
-              const price = numVal(qs('.shipment-price', row));
-              const rowTotal = count * price;
-              qs('.shipment-total', row).value = rowTotal.toFixed(2);
-              total += rowTotal;
-          });
-          return total;
-      };
       
       const updatePriceFromSelect = (selectId, priceInputId, fallback) => {
         const s = el(selectId); const p = el(priceInputId); if (!s || !p) return;
@@ -836,7 +824,11 @@
         
         // Module
         allData.push(["Module", qs('#panelModel option:checked').text, numVal(el('panelCount')), numVal(el('panelPrice')), numVal(el('panelRowTotal'))]);
-        allData.push(["", "Transport Module", "", "", numVal(el('panelTransportTotalDisplay'))]);
+        let panelTransportTotal = 0;
+        qsa('#panelShipmentItems .shipment-row').forEach(row => {
+            panelTransportTotal += numVal(qs('.shipment-total', row));
+        });
+        allData.push(["", "Transport Module", "", "", panelTransportTotal]);
 
         // Wechselrichter
         qsa('.inverter-row').forEach(row => {
@@ -848,7 +840,11 @@
                 numVal(qs('.inverter-total', row))
             ]);
         });
-        allData.push(["", "Transport Wechselrichter", "", "", numVal(el('inverterTransportTotalDisplay'))]);
+        let inverterTransportTotal = 0;
+        qsa('#inverterShipmentItems .shipment-row').forEach(row => {
+            inverterTransportTotal += numVal(qs('.shipment-total', row));
+        });
+        allData.push(["", "Transport Wechselrichter", "", "", inverterTransportTotal]);
 
         // Speicher
         qsa('.battery-row').forEach(row => {
@@ -873,8 +869,12 @@
                 ]);
             }
         });
-        if(numVal(el('batteryTransportTotalDisplay')) > 0) {
-            allData.push(["", "Transport Speicher", "", "", numVal(el('batteryTransportTotalDisplay'))]);
+        let batteryTransportTotal = 0;
+        qsa('#batteryShipmentItems .shipment-row').forEach(row => {
+            batteryTransportTotal += numVal(qs('.shipment-total', row));
+        });
+        if(batteryTransportTotal > 0) {
+            allData.push(["", "Transport Speicher", "", "", batteryTransportTotal]);
         }
         
         // Verschiedene Kosten
@@ -917,6 +917,9 @@
       addBatteryRow();
       addBmsRow();
       addAdditionalCostField();
+      addShipmentRow('panelShipmentItems', 'panel');
+      addShipmentRow('inverterShipmentItems', 'inverter');
+      addShipmentRow('batteryShipmentItems', 'battery');
       updatePriceFromSelect('panelModel','panelPrice',46.99);
       updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
       updateWpBasedTotals();
