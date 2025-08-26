@@ -814,52 +814,52 @@
         allData.push(["Kategorie", "Komponente / Beschreibung", "Anzahl", "Einzelpreis (€)", "Gesamtkosten (€)"]);
         
         // Module
-        allData.push(["Module", qs('#panelModel option:checked').text, numVal(el('panelCount')), numVal(el('panelPrice')), numVal(el('panelRowTotal'))]);
-        allData.push(["", "Transport Module", "", "", numVal(el('panelTransportTotalDisplay'))]);
+        allData.push(["Module", qs('#panelModel option:checked').text, String(numVal(el('panelCount'))), String(numVal(el('panelPrice'))), String(numVal(el('panelRowTotal')))]);
+        allData.push(["", "Transport Module", "", "", String(numVal(el('panelTransportTotalDisplay')))]);
 
         // Wechselrichter
         qsa('.inverter-row').forEach(row => {
             allData.push([
                 "Wechselrichter",
                 qs('.inverter-model option:checked', row).text,
-                numVal(qs('.inverter-count', row)),
-                numVal(qs('.inverter-price', row)),
-                numVal(qs('.inverter-total', row))
+                String(numVal(qs('.inverter-count', row))),
+                String(numVal(qs('.inverter-price', row))),
+                String(numVal(qs('.inverter-total', row)))
             ]);
         });
-        allData.push(["", "Transport Wechselrichter", "", "", numVal(el('inverterTransportTotalDisplay'))]);
+        allData.push(["", "Transport Wechselrichter", "", "", String(numVal(el('inverterTransportTotalDisplay')))]);
 
         // Speicher
         qsa('.battery-row').forEach(row => {
             allData.push([
                 "Speicher",
                 qs('.battery-model option:checked', row).text,
-                numVal(qs('.battery-count', row)),
-                numVal(qs('.battery-price', row)),
-                numVal(qs('.battery-total', row))
+                String(numVal(qs('.battery-count', row))),
+                String(numVal(qs('.battery-price', row))),
+                String(numVal(qs('.battery-total', row)))
             ]);
         });
         qsa('.bms-row').forEach(row => {
             allData.push([
                 "Speicher",
                 qs('.bms-model option:checked', row).text,
-                numVal(qs('.bms-count', row)),
-                numVal(qs('.bms-price', row)),
-                numVal(qs('.bms-total', row))
+                String(numVal(qs('.bms-count', row))),
+                String(numVal(qs('.bms-price', row))),
+                String(numVal(qs('.bms-total', row)))
             ]);
         });
-        allData.push(["", "Transport Speicher", "", "", numVal(el('batteryTransportTotalDisplay'))]);
+        allData.push(["", "Transport Speicher", "", "", String(numVal(el('batteryTransportTotalDisplay')))]);
 
         // Verschiedene Kosten
-        allData.push(["Verschiedene Kosten", "Unterkonstruktion", `${numVal(el('constructionCost'))} €/Wp`, "", numVal(el('constructionTotalDisplay'))]);
-        allData.push(["", "Montagekosten", `${numVal(el('accessoriesCost'))} €/Wp`, "", numVal(el('accessoriesTotalDisplay'))]);
+        allData.push(["Verschiedene Kosten", "Unterkonstruktion", `${numVal(el('constructionCost'))} €/Wp`, "", String(numVal(el('constructionTotalDisplay')))]);
+        allData.push(["", "Montagekosten", `${numVal(el('accessoriesCost'))} €/Wp`, "", String(numVal(el('accessoriesTotalDisplay')))]);
         qsa('.additional-cost-row').forEach((row, index) => {
             allData.push([
                 "",
                 qs(`#addCostDesc_${index}`).value || `Zusatzkosten ${index + 1}`,
-                numVal(qs(`#addCostQty_${index}`)),
-                numVal(qs(`#addCostPrice_${index}`)),
-                (numVal(qs(`#addCostQty_${index}`)) * numVal(qs(`#addCostPrice_${index}`)))
+                String(numVal(qs(`#addCostQty_${index}`))),
+                String(numVal(qs(`#addCostPrice_${index}`))),
+                String((numVal(qs(`#addCostQty_${index}`)) * numVal(qs(`#addCostPrice_${index}`))))
             ]);
         });
         allData.push([]); // Spacer
@@ -889,3 +889,4 @@
     });
   </script>
 </body>
+</html>
