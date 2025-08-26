@@ -88,27 +88,8 @@
             <input type="text" id="panelRowTotal" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 font-bold text-right num" value="0.00" readonly />
           </div>
         </div>
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label for="panelShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
-            <select id="panelShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-              <option value="package">Paket</option>
-              <option value="pallet">Europalette</option>
-            </select>
-          </div>
-          <div>
-            <label for="panelTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
-            <input type="number" id="panelTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="panelTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
-            <input type="number" id="panelTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Transport Gesamt (€)</label>
-            <input type="text" id="panelTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
-          </div>
-        </div>
+        <div id="panelShipmentItems" class="space-y-3 mt-4"></div>
+        <button type="button" id="addPanelShipmentButton" class="text-sm text-green-600 hover:text-green-800 transition-colors mt-2">+ weitere Sendung hinzufügen</button>
         <div class="mt-4 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
             <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Module</span>
             <input type="text" id="subtotalPanels" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
@@ -126,27 +107,8 @@
             <button type="button" id="addInverterButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiterer Wechselrichter</button>
         </div>
         <div id="inverterItems" class="space-y-3"></div>
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label for="inverterShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
-            <select id="inverterShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-              <option value="package">Paket</option>
-              <option value="pallet">Europalette</option>
-            </select>
-          </div>
-          <div>
-            <label for="inverterTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
-            <input type="number" id="inverterTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="inverterTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
-            <input type="number" id="inverterTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Transport Gesamt (€)</label>
-            <input type="text" id="inverterTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
-          </div>
-        </div>
+        <div id="inverterShipmentItems" class="space-y-3 mt-4"></div>
+        <button type="button" id="addInverterShipmentButton" class="text-sm text-green-600 hover:text-green-800 transition-colors mt-2">+ weitere Sendung hinzufügen</button>
         <div class="mt-4 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
             <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Wechselrichter</span>
             <input type="text" id="subtotalInverter" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
@@ -159,43 +121,18 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 3.363-2.73 6.093-6.093 6.093h-.758v1.365c0 1.258-.87 2.308-2.008 2.531a2.383 2.383 0 01-2.083-2.327l.006-.173V12.75H4.125c-3.363 0-6.093-2.73-6.093-6.093S.762.282 4.125.282h12.031c3.363 0 6.093 2.73 6.093 6.093zm-5.625 2.25v-3.75h-8.25v3.75h8.25z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12.375 14.25v-1.5h-1.5v1.5h1.5z" transform="rotate(90 12.375 14.25)"/></svg>
           Speicher (Optional)
         </h2>
-
-        <!-- Batteries: dynamic list -->
         <div class="flex items-center justify-between mb-2">
           <h3 class="text-lg font-semibold text-gray-700">Batteriemodule</h3>
           <button type="button" id="addBatteryButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiteres Batteriemodul</button>
         </div>
         <div id="batteryItems" class="space-y-3"></div>
-
-        <!-- BMS: dynamic list -->
         <div class="flex items-center justify-between mt-6 mb-2">
           <h3 class="text-lg font-semibold text-gray-700">BMS / Steuermodul(e)</h3>
           <button type="button" id="addBmsButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiteres BMS</button>
         </div>
         <div id="bmsItems" class="space-y-3"></div>
-
-        <!-- Transport -->
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label for="batteryShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
-            <select id="batteryShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-              <option value="package">Paket</option>
-              <option value="pallet">Europalette</option>
-            </select>
-          </div>
-          <div>
-            <label for="batteryTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
-            <input type="number" id="batteryTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="batteryTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
-            <input type="number" id="batteryTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Transport Gesamt (€)</label>
-            <input type="text" id="batteryTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
-          </div>
-        </div>
+        <div id="batteryShipmentItems" class="space-y-3 mt-6"></div>
+        <button type="button" id="addBatteryShipmentButton" class="text-sm text-green-600 hover:text-green-800 transition-colors mt-2">+ weitere Sendung hinzufügen</button>
         <div class="mt-6 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
             <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Speicher</span>
             <input type="text" id="subtotalStorage" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
@@ -328,10 +265,16 @@
         el(totalId).value = (count * price).toFixed(2);
       };
 
-      const updateTransportTotal = (countId, priceId, totalDisplayId) => {
-        const count = parseFloat(el(countId).value) || 0;
-        const price = parseFloat(el(priceId).value) || 0;
-        el(totalDisplayId).value = (count * price).toFixed(2);
+      const updateTransportTotal = (containerId) => {
+          let total = 0;
+          qsa(`.${containerId}-shipment-row`).forEach(row => {
+              const count = numVal(qs('.shipment-count', row));
+              const price = numVal(qs('.shipment-price', row));
+              const rowTotal = count * price;
+              qs('.shipment-total', row).value = rowTotal.toFixed(2);
+              total += rowTotal;
+          });
+          return total;
       };
       
       const updatePriceFromSelect = (selectId, priceInputId, fallback) => {
@@ -677,7 +620,7 @@
           updateAllSubtotals();
       });
       ['panelTransportCount','panelTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
-          updateTransportTotal('panelTransportCount','panelTransportPrice','panelTransportTotalDisplay');
+          updateTransportTotal('panelTransportTotalDisplay');
           updateAllSubtotals();
       }));
 
@@ -705,13 +648,13 @@
           }
       });
       ['inverterTransportCount','inverterTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
-          updateTransportTotal('inverterTransportCount','inverterTransportPrice','inverterTransportTotalDisplay');
+          updateTransportTotal('inverterTransportTotalDisplay');
           updateAllSubtotals();
       }));
 
       // Battery transport
       ['batteryTransportCount','batteryTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
-          updateTransportTotal('batteryTransportCount','batteryTransportPrice','batteryTransportTotalDisplay');
+          updateTransportTotal('batteryTransportTotalDisplay');
           updateAllSubtotals();
       }));
 
