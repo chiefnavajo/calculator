@@ -897,6 +897,19 @@
         allData.push(["Zusammenfassung", "", "", "", ""]);
         allData.push(["Gesamtanlagenleistung", el('result-totalPower').innerText, "", "", ""]);
         allData.push(["GESAMTE EPC-KOSTEN", "", "", "", el('result-totalEPCCost').innerText]);
+        
+        const totalEPCCost = parseFloat(el('result-totalEPCCost').innerText);
+        const totalPowerWpText = el('result-totalPower').innerText;
+        const totalPowerWp = parseFloat(totalPowerWpText); 
+        
+        if (totalPowerWp > 0) {
+            const totalPowerKwp = totalPowerWp / 1000;
+            const costPerWp = (totalEPCCost / totalPowerWp).toFixed(2);
+            const costPerKwp = (totalEPCCost / totalPowerKwp).toFixed(2);
+            allData.push(["Gesamtkosten/Wp", "", "", "", costPerWp]);
+            allData.push(["Gesamtkosten/kWp", "", "", "", costPerKwp]);
+        }
+        
         allData.push(["ENDPREIS FÜR KUNDEN", "", "", "", el('result-finalClientPrice').innerText]);
 
         const ws = XLSX.utils.aoa_to_sheet(allData);
