@@ -78,6 +78,12 @@
             <input type="text" id="panelTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
           </div>
         </div>
+        <div class="mt-4 pt-4 border-t-2 border-slate-300 grid md:grid-cols-4 gap-4 items-center">
+            <div class="md:col-span-3 text-right font-bold text-gray-700 text-lg pr-2">Zwischensumme Module</div>
+            <div>
+                <input type="text" id="subtotalPanels" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
+            </div>
+        </div>
       </section>
 
       <!-- Inverter Section -->
@@ -135,6 +141,12 @@
             <input type="text" id="inverterTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
           </div>
         </div>
+        <div class="mt-4 pt-4 border-t-2 border-slate-300 grid md:grid-cols-4 gap-4 items-center">
+            <div class="md:col-span-3 text-right font-bold text-gray-700 text-lg pr-2">Zwischensumme Wechselrichter</div>
+            <div>
+                <input type="text" id="subtotalInverter" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
+            </div>
+        </div>
       </section>
 
       <!-- Battery Section -->
@@ -180,6 +192,12 @@
             <input type="text" id="batteryTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
           </div>
         </div>
+        <div class="mt-6 pt-4 border-t-2 border-slate-300 grid md:grid-cols-4 gap-4 items-center">
+            <div class="md:col-span-3 text-right font-bold text-gray-700 text-lg pr-2">Zwischensumme Speicher</div>
+            <div>
+                <input type="text" id="subtotalStorage" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
+            </div>
+        </div>
       </section>
 
       <!-- Other Costs Section -->
@@ -188,28 +206,36 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           Verschiedene Kosten
         </h2>
-        <div class="grid md:grid-cols-2 gap-4">
-          <div>
-            <label for="constructionCost" class="block text-sm font-medium text-gray-700">Montagestruktur (€/Wp)</label>
-            <input type="number" id="constructionCost" value="0.15" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="accessoriesCost" class="block text-sm font-medium text-gray-700">Zubehörkosten (€/Wp)</label>
-            <input type="number" id="accessoriesCost" value="0.05" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="laborCost" class="block text-sm font-medium text-gray-700">Arbeitskosten (€/Wp)</label>
-            <input type="number" id="laborCost" value="0.25" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="otherFixedCosts" class="block text-sm font-medium text-gray-700">Sonstige Fixkosten (€)</label>
-            <input type="number" id="otherFixedCosts" value="500" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
+        <div class="space-y-4">
+            <div class="grid md:grid-cols-2 gap-4 border-b border-slate-200 pb-4">
+              <div>
+                <label for="constructionCost" class="block text-sm font-medium text-gray-700">Unterkonstruktion (€/Wp)</label>
+                <input type="number" id="constructionCost" value="0.15" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+              </div>
+              <div>
+                <label for="constructionTotalDisplay" class="block text-sm font-medium text-gray-700">Gesamtkosten Unterkonstruktion (€)</label>
+                <input type="text" id="constructionTotalDisplay" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 font-bold text-right num" value="0.00" readonly />
+              </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 border-b border-slate-200 pb-4">
+                <div>
+                    <label for="accessoriesCost" class="block text-sm font-medium text-gray-700">Montagekosten (€/Wp)</label>
+                    <input type="number" id="accessoriesCost" value="0.05" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+                </div>
+                <div>
+                    <label for="accessoriesTotalDisplay" class="block text-sm font-medium text-gray-700">Gesamtkosten Montage (€)</label>
+                    <input type="text" id="accessoriesTotalDisplay" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 font-bold text-right num" value="0.00" readonly />
+                </div>
+            </div>
         </div>
         <div class="mt-6 space-y-4">
           <h3 class="text-xl font-semibold text-gray-700">Zusätzliche Kosten</h3>
           <div id="additionalCostsContainer"></div>
           <button type="button" id="addCostButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ Weiteren Kostenpunkt hinzufügen</button>
+        </div>
+        <div class="mt-6 pt-4 border-t-2 border-slate-300 grid md:grid-cols-2 gap-4 items-center">
+            <label class="block text-lg font-bold text-gray-700 text-right">Zwischensumme Verschiedene Kosten</label>
+            <input type="text" id="subtotalMisc" class="block w-full rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
         </div>
       </section>
 
@@ -221,11 +247,11 @@
         </h2>
         <div class="flex items-center space-x-4 mb-4">
           <div class="flex items-center">
-            <input type="checkbox" id="useProfitMargin" name="calculationMethod" value="profit" checked class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500" />
+            <input type="radio" id="useProfitMargin" name="calculationMethod" value="profit" checked class="h-4 w-4 text-green-600 border-gray-300 focus:ring-green-500" />
             <label for="useProfitMargin" class="ml-2 block text-sm font-medium text-gray-700">Gewinnspanne</label>
           </div>
           <div class="flex items-center">
-            <input type="checkbox" id="useFixedPrice" name="calculationMethod" value="fixed" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500" />
+            <input type="radio" id="useFixedPrice" name="calculationMethod" value="fixed" class="h-4 w-4 text-green-600 border-gray-300 focus:ring-green-500" />
             <label for="useFixedPrice" class="ml-2 block text-sm font-medium text-gray-700">Festpreis pro kWp</label>
           </div>
         </div>
@@ -264,10 +290,8 @@
             <tr><td class="px-6 py-4 text-sm text-gray-900">Module (Materialien)</td><td id="result-panelsCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-panelsCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
             <tr><td class="px-6 py-4 text-sm text-gray-900">Wechselrichter (Materialien)</td><td id="result-inverterCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-inverterCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
             <tr><td class="px-6 py-4 text-sm text-gray-900">Batteriemodule & BMS</td><td id="result-batteryCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-batteryCostPerWp" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Montagestruktur</td><td id="result-constructionTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-constructionUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Zubehör</td><td id="result-accessoriesTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-accessoriesUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Arbeitskosten</td><td id="result-laborTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-laborUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-6 py-4 text-sm text-gray-900">Sonstige Fixkosten</td><td id="result-otherFixedTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-otherFixedUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-6 py-4 text-sm text-gray-900">Unterkonstruktion</td><td id="result-constructionTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-constructionUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
+            <tr><td class="px-6 py-4 text-sm text-gray-900">Montagekosten</td><td id="result-accessoriesTotalCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td><td id="result-accessoriesUnitCost" class="px-6 py-4 text-right text-sm text-gray-500">0.00</td></tr>
             <tr><td class="px-6 py-4 text-sm font-bold text-gray-900">Zusätzliche Kosten</td><td id="result-additionalCostsTotal" class="px-6 py-4 text-right font-bold text-sm text-gray-500">0.00</td><td id="result-additionalCostsPerWp" class="px-6 py-4 text-right font-bold text-sm text-gray-500">0.00</td></tr>
             <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Module</td><td id="result-panelTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-panelTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
             <tr><td class="px-6 py-4 text-sm text-gray-900 font-bold">Transport Wechselrichter</td><td id="result-inverterTransportTotal" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-inverterTransportUnitCost" class="px-6 py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
@@ -294,11 +318,24 @@
         const total = (numVal(countInput) * numVal(priceInput)).toFixed(2);
         totalInput.value = total;
       };
+      
+      const updateRowTotalByIds = (countId, priceId, totalId) => {
+        const count = numVal(el(countId));
+        const price = numVal(el(priceId));
+        el(totalId).value = (count * price).toFixed(2);
+      };
 
       const updateTransportTotal = (countId, priceId, totalDisplayId) => {
         const count = parseFloat(el(countId).value) || 0;
         const price = parseFloat(el(priceId).value) || 0;
         el(totalDisplayId).value = (count * price).toFixed(2);
+      };
+      
+      const updatePriceFromSelect = (selectId, priceInputId, fallback) => {
+        const s = el(selectId); const p = el(priceInputId); if (!s || !p) return;
+        const opt = s.options[s.selectedIndex];
+        const price = opt?.dataset?.price ? parseFloat(opt.dataset.price) : fallback;
+        p.value = (price || 0).toFixed(2);
       };
 
       // --- Dynamic Batteries & BMS ---
@@ -335,7 +372,6 @@
             <input type="text" class="battery-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
           </div>`;
         el('batteryItems').appendChild(row);
-        // init price from selected option
         const sel = row.querySelector('.battery-model');
         const priceInput = row.querySelector('.battery-price');
         const opt = sel.options[sel.selectedIndex];
@@ -363,52 +399,17 @@
             <input type="text" class="bms-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
           </div>`;
         el('bmsItems').appendChild(row);
-        // init price from selected option
         const sel = row.querySelector('.bms-model');
         const priceInput = row.querySelector('.bms-price');
         const opt = sel.options[sel.selectedIndex];
         priceInput.value = (opt?.dataset?.price ? parseFloat(opt.dataset.price) : 0).toFixed(2);
       };
 
-      // Delegated events for dynamic rows
-      el('batteryItems').addEventListener('change', (e) => {
-        if (e.target.classList.contains('battery-model')) {
-          const row = e.target.closest('.battery-row');
-          const opt = e.target.options[e.target.selectedIndex];
-          const priceInput = row.querySelector('.battery-price');
-          priceInput.value = (opt?.dataset?.price ? parseFloat(opt.dataset.price) : 0).toFixed(2);
-          updateRowTotalByInputs(row.querySelector('.battery-count'), row.querySelector('.battery-price'), row.querySelector('.battery-total'));
-        }
-      });
-      el('batteryItems').addEventListener('input', (e) => {
-        if (e.target.classList.contains('battery-count') || e.target.classList.contains('battery-price')) {
-          const row = e.target.closest('.battery-row');
-          updateRowTotalByInputs(row.querySelector('.battery-count'), row.querySelector('.battery-price'), row.querySelector('.battery-total'));
-        }
-      });
-
-      el('bmsItems').addEventListener('change', (e) => {
-        if (e.target.classList.contains('bms-model')) {
-          const row = e.target.closest('.bms-row');
-          const opt = e.target.options[e.target.selectedIndex];
-          const priceInput = row.querySelector('.bms-price');
-          priceInput.value = (opt?.dataset?.price ? parseFloat(opt.dataset.price) : 0).toFixed(2);
-          updateRowTotalByInputs(row.querySelector('.bms-count'), row.querySelector('.bms-price'), row.querySelector('.bms-total'));
-        }
-      });
-      el('bmsItems').addEventListener('input', (e) => {
-        if (e.target.classList.contains('bms-count') || e.target.classList.contains('bms-price')) {
-          const row = e.target.closest('.bms-row');
-          updateRowTotalByInputs(row.querySelector('.bms-count'), row.querySelector('.bms-price'), row.querySelector('.bms-total'));
-        }
-      });
-
-      // Additional costs dynamic fields
       const addAdditionalCostField = () => {
         const container = el('additionalCostsContainer');
         const index = container.children.length; if (index >= 10) return;
         const div = document.createElement('div');
-        div.className = 'grid md:grid-cols-4 gap-2 border-t border-slate-200 pt-4';
+        div.className = 'grid md:grid-cols-4 gap-2 border-t border-slate-200 pt-4 additional-cost-row';
         div.innerHTML = `
           <div>
             <label for="addCostDesc_${index}" class="block text-sm font-medium text-gray-700">Beschreibung</label>
@@ -430,71 +431,96 @@
             <input type="number" id="addCostPrice_${index}" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
           </div>`;
         container.appendChild(div);
+        qsa('.additional-cost-row input, .additional-cost-row select').forEach(input => {
+            input.addEventListener('input', updateAllSubtotals);
+        });
+      };
+      
+      const getAdditionalCostsTotal = () => {
+        let total = 0;
+        const container = el('additionalCostsContainer');
+        const panelModel = parseFloat(el('panelModel').value) || 0;
+        const panelCount = parseFloat(el('panelCount').value) || 0;
+        const totalPowerWp = panelCount * panelModel;
+        for (let i = 0; i < container.children.length; i++) {
+            const type = el(`addCostType_${i}`)?.value;
+            const qty  = parseFloat(el(`addCostQty_${i}`)?.value) || 0;
+            const price= parseFloat(el(`addCostPrice_${i}`)?.value) || 0;
+            if (type === 'perWp') {
+                total += price * totalPowerWp;
+            } else {
+                total += qty * price;
+            }
+        }
+        return total;
       };
 
-      // Main calculation
+      const updateAllSubtotals = () => {
+        // Panel Subtotal
+        const panelTotal = numVal(el('panelRowTotal'));
+        const panelTransport = numVal(el('panelTransportTotalDisplay'));
+        el('subtotalPanels').value = (panelTotal + panelTransport).toFixed(2);
+
+        // Inverter Subtotal
+        const inverterTotal = numVal(el('inverterRowTotal'));
+        const inverterTransport = numVal(el('inverterTransportTotalDisplay'));
+        el('subtotalInverter').value = (inverterTotal + inverterTransport).toFixed(2);
+
+        // Storage Subtotal
+        let batteryTotal = 0;
+        qsa('.battery-total').forEach(inp => batteryTotal += numVal(inp));
+        let bmsTotal = 0;
+        qsa('.bms-total').forEach(inp => bmsTotal += numVal(inp));
+        const batteryTransport = numVal(el('batteryTransportTotalDisplay'));
+        el('subtotalStorage').value = (batteryTotal + bmsTotal + batteryTransport).toFixed(2);
+
+        // Misc Costs Subtotal
+        const constructionTotal = numVal(el('constructionTotalDisplay'));
+        const accessoriesTotal = numVal(el('accessoriesTotalDisplay'));
+        const additionalCostsTotal = getAdditionalCostsTotal();
+        el('subtotalMisc').value = (constructionTotal + accessoriesTotal + additionalCostsTotal).toFixed(2);
+      };
+
+      const updateWpBasedTotals = () => {
+        const panelModel = parseFloat(el('panelModel').value) || 0;
+        const panelCount = parseFloat(el('panelCount').value) || 0;
+        const totalPowerWp = panelCount * panelModel;
+        const constructionCostPerWp = numVal(el('constructionCost'));
+        el('constructionTotalDisplay').value = (totalPowerWp * constructionCostPerWp).toFixed(2);
+        const accessoriesCostPerWp = numVal(el('accessoriesCost'));
+        el('accessoriesTotalDisplay').value = (totalPowerWp * accessoriesCostPerWp).toFixed(2);
+      };
+
       const calculateCosts = () => {
-        // Panels
         const panelModel = parseFloat(el('panelModel').value) || 0;
         const panelCount = parseFloat(el('panelCount').value) || 0;
         const panelPrice = parseFloat(el('panelPrice').value) || 0;
-        const panelTransportTotal = (parseFloat(el('panelTransportCount').value) || 0) * (parseFloat(el('panelTransportPrice').value) || 0);
-
-        // Inverter
+        const panelTransportTotal = numVal(el('panelTransportTotalDisplay'));
         const inverterCount = parseFloat(el('inverterCount').value) || 0;
         const inverterPrice = parseFloat(el('inverterPrice').value) || 0;
-        const inverterTransportTotal = (parseFloat(el('inverterTransportCount').value) || 0) * (parseFloat(el('inverterTransportPrice').value) || 0);
-
-        // Batteries (sum across rows)
+        const inverterTransportTotal = numVal(el('inverterTransportTotalDisplay'));
         let batteriesTotalCost = 0;
         qsa('.battery-row').forEach(row => {
-          const c = parseFloat(qs('.battery-count', row).value) || 0;
-          const p = parseFloat(qs('.battery-price', row).value) || 0;
-          batteriesTotalCost += c * p;
+          batteriesTotalCost += numVal(qs('.battery-total', row));
         });
-
-        // BMS (sum across rows)
         let bmsTotalCost = 0;
         qsa('.bms-row').forEach(row => {
-          const c = parseFloat(qs('.bms-count', row).value) || 0;
-          const p = parseFloat(qs('.bms-price', row).value) || 0;
-          bmsTotalCost += c * p;
+          bmsTotalCost += numVal(qs('.bms-total', row));
         });
-
-        const batteryTransportTotal = (parseFloat(el('batteryTransportCount').value) || 0) * (parseFloat(el('batteryTransportPrice').value) || 0);
-
-        // Per-Wp costs
+        const batteryTransportTotal = numVal(el('batteryTransportTotalDisplay'));
         const constructionCostPerWp = parseFloat(el('constructionCost').value) || 0;
         const accessoriesCostPerWp = parseFloat(el('accessoriesCost').value) || 0;
-        const laborCostPerWp = parseFloat(el('laborCost').value) || 0;
-        const otherFixedCosts = parseFloat(el('otherFixedCosts').value) || 0;
-
         const totalPowerWp = panelCount * panelModel;
         const totalPowerKwp = totalPowerWp / 1000;
-
         const panelsTotalCost = panelCount * panelPrice;
         const inverterTotalCost = inverterCount * inverterPrice;
-        const batteryTotalCost = batteriesTotalCost + bmsTotalCost; // zusammen ausweisen
-
+        const batteryTotalCost = batteriesTotalCost + bmsTotalCost;
         const constructionTotalCost = totalPowerWp * constructionCostPerWp;
         const accessoriesTotalCost = totalPowerWp * accessoriesCostPerWp;
-        const laborTotalCost = totalPowerWp * laborCostPerWp;
-
-        // Additional costs
-        let additionalCosts = 0;
-        const container = el('additionalCostsContainer');
-        for (let i = 0; i < container.children.length; i++) {
-          const type = el(`addCostType_${i}`)?.value;
-          const qty  = parseFloat(el(`addCostQty_${i}`)?.value) || 0;
-          const price= parseFloat(el(`addCostPrice_${i}`)?.value) || 0;
-          if (type === 'perWp') additionalCosts += price * totalPowerWp; else additionalCosts += qty * price;
-        }
-
+        const additionalCosts = getAdditionalCostsTotal();
         const transportTotalCost = panelTransportTotal + inverterTransportTotal + batteryTransportTotal;
-
         const totalEPCCost = panelsTotalCost + inverterTotalCost + batteryTotalCost +
-          constructionTotalCost + accessoriesTotalCost + laborTotalCost + otherFixedCosts + additionalCosts + transportTotalCost;
-
+          constructionTotalCost + accessoriesTotalCost + additionalCosts + transportTotalCost;
         let finalClientPrice = 0;
         if (el('useProfitMargin').checked) {
           const pm = (parseFloat(el('profitMargin').value) || 0) / 100;
@@ -502,11 +528,7 @@
         } else if (el('useFixedPrice').checked) {
           const fx = parseFloat(el('fixedPricePerKwp').value) || 0;
           finalClientPrice = totalPowerKwp * fx;
-        } else {
-          finalClientPrice = totalEPCCost;
         }
-
-        // Results
         setText('result-totalPower', `${totalPowerWp} Wp (${totalPowerKwp.toFixed(2)} kWp)`);
         setText('result-panelsCost', panelsTotalCost.toFixed(2));
         setText('result-panelsCostPerWp', safeDiv(panelsTotalCost, totalPowerWp));
@@ -518,10 +540,6 @@
         setText('result-constructionUnitCost', constructionCostPerWp.toFixed(2));
         setText('result-accessoriesTotalCost', accessoriesTotalCost.toFixed(2));
         setText('result-accessoriesUnitCost', accessoriesCostPerWp.toFixed(2));
-        setText('result-laborTotalCost', laborTotalCost.toFixed(2));
-        setText('result-laborUnitCost', laborCostPerWp.toFixed(2));
-        setText('result-otherFixedTotalCost', otherFixedCosts.toFixed(2));
-        setText('result-otherFixedUnitCost', safeDiv(otherFixedCosts, totalPowerWp));
         setText('result-additionalCostsTotal', additionalCosts.toFixed(2));
         setText('result-additionalCostsPerWp', safeDiv(additionalCosts, totalPowerWp));
         setText('result-panelTransportTotal', panelTransportTotal.toFixed(2));
@@ -533,51 +551,111 @@
         setText('result-totalEPCCost', totalEPCCost.toFixed(2));
         setText('result-totalEPCCostPerWp', safeDiv(totalEPCCost, totalPowerWp));
         setText('result-finalClientPrice', finalClientPrice.toFixed(2));
-
-        // Sync displays
-        el('panelTransportTotalDisplay').value = panelTransportTotal.toFixed(2);
-        el('inverterTransportTotalDisplay').value = inverterTransportTotal.toFixed(2);
-        el('batteryTransportTotalDisplay').value = batteryTransportTotal.toFixed(2);
-
         el('results').classList.remove('hidden');
       };
 
-      // --- Existing sections listeners (panels & inverter) ---
-      const updateRowTotalByIds = (countId, priceId, totalId) => {
-        const count = parseFloat(el(countId).value) || 0;
-        const price = parseFloat(el(priceId).value) || 0;
-        el(totalId).value = (count * price).toFixed(2);
-      };
-
-      const updatePriceFromSelect = (selectId, priceInputId, fallback) => {
-        const s = el(selectId); const p = el(priceInputId); if (!s || !p) return;
-        const opt = s.options[s.selectedIndex];
-        const price = opt?.dataset?.price ? parseFloat(opt.dataset.price) : fallback;
-        p.value = (price || 0).toFixed(2);
-      };
-
+      // --- Event Listeners ---
       // Panels
-      el('panelModel').addEventListener('change', () => { updatePriceFromSelect('panelModel','panelPrice',46.99); updateRowTotalByIds('panelCount','panelPrice','panelRowTotal'); });
-      el('panelCount').addEventListener('input', () => updateRowTotalByIds('panelCount','panelPrice','panelRowTotal'));
-      el('panelPrice').addEventListener('input', () => updateRowTotalByIds('panelCount','panelPrice','panelRowTotal'));
-      ['panelTransportCount','panelTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => updateTransportTotal('panelTransportCount','panelTransportPrice','panelTransportTotalDisplay')));
+      el('panelModel').addEventListener('change', () => { 
+          updatePriceFromSelect('panelModel','panelPrice', 46.99); 
+          updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
+          updateWpBasedTotals();
+          updateAllSubtotals();
+      });
+      el('panelCount').addEventListener('input', () => {
+          updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
+          updateWpBasedTotals();
+          updateAllSubtotals();
+      });
+      el('panelPrice').addEventListener('input', () => {
+          updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
+          updateAllSubtotals();
+      });
+      ['panelTransportCount','panelTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
+          updateTransportTotal('panelTransportCount','panelTransportPrice','panelTransportTotalDisplay');
+          updateAllSubtotals();
+      }));
 
       // Inverter
-      el('inverterModel').addEventListener('change', () => { updatePriceFromSelect('inverterModel','inverterPrice',849.48); updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal'); });
-      el('inverterCount').addEventListener('input', () => updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal'));
-      el('inverterPrice').addEventListener('input', () => updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal'));
-      ['inverterTransportCount','inverterTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => updateTransportTotal('inverterTransportCount','inverterTransportPrice','inverterTransportTotalDisplay')));
+      el('inverterModel').addEventListener('change', () => { 
+          updatePriceFromSelect('inverterModel','inverterPrice', 849.48); 
+          updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
+          updateAllSubtotals();
+      });
+      el('inverterCount').addEventListener('input', () => {
+          updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
+          updateAllSubtotals();
+      });
+      el('inverterPrice').addEventListener('input', () => {
+          updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
+          updateAllSubtotals();
+      });
+      ['inverterTransportCount','inverterTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
+          updateTransportTotal('inverterTransportCount','inverterTransportPrice','inverterTransportTotalDisplay');
+          updateAllSubtotals();
+      }));
 
       // Battery transport
-      ['batteryTransportCount','batteryTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => updateTransportTotal('batteryTransportCount','batteryTransportPrice','batteryTransportTotalDisplay')));
+      ['batteryTransportCount','batteryTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
+          updateTransportTotal('batteryTransportCount','batteryTransportPrice','batteryTransportTotalDisplay');
+          updateAllSubtotals();
+      }));
+
+      // Wp-based costs listeners
+      el('constructionCost').addEventListener('input', () => {
+          updateWpBasedTotals();
+          updateAllSubtotals();
+      });
+      el('accessoriesCost').addEventListener('input', () => {
+          updateWpBasedTotals();
+          updateAllSubtotals();
+      });
+
+      // Dynamic Rows
+      el('batteryItems').addEventListener('change', (e) => {
+          if (e.target.classList.contains('battery-model')) {
+              const row = e.target.closest('.battery-row');
+              const opt = e.target.options[e.target.selectedIndex];
+              qs('.battery-price', row).value = (opt?.dataset?.price ? parseFloat(opt.dataset.price) : 0).toFixed(2);
+              updateRowTotalByInputs(qs('.battery-count', row), qs('.battery-price', row), qs('.battery-total', row));
+              updateAllSubtotals();
+          }
+      });
+      el('batteryItems').addEventListener('input', (e) => {
+          if (e.target.classList.contains('battery-count') || e.target.classList.contains('battery-price')) {
+              const row = e.target.closest('.battery-row');
+              updateRowTotalByInputs(qs('.battery-count', row), qs('.battery-price', row), qs('.battery-total', row));
+              updateAllSubtotals();
+          }
+      });
+       el('bmsItems').addEventListener('change', (e) => {
+          if (e.target.classList.contains('bms-model')) {
+              const row = e.target.closest('.bms-row');
+              const opt = e.target.options[e.target.selectedIndex];
+              qs('.bms-price', row).value = (opt?.dataset?.price ? parseFloat(opt.dataset.price) : 0).toFixed(2);
+              updateRowTotalByInputs(qs('.bms-count', row), qs('.bms-price', row), qs('.bms-total', row));
+              updateAllSubtotals();
+          }
+      });
+      el('bmsItems').addEventListener('input', (e) => {
+          if (e.target.classList.contains('bms-count') || e.target.classList.contains('bms-price')) {
+              const row = e.target.closest('.bms-row');
+              updateRowTotalByInputs(qs('.bms-count', row), qs('.bms-price', row), qs('.bms-total', row));
+              updateAllSubtotals();
+          }
+      });
 
       // Profit vs Fixed
-      const profit = el('useProfitMargin');
-      const fixed  = el('useFixedPrice');
+      const profitRadio = el('useProfitMargin');
+      const fixedRadio = el('useFixedPrice');
       const profitDiv = el('profitMarginDiv');
-      const fixedDiv  = el('fixedPriceDiv');
-      profit.addEventListener('change', () => { if (profit.checked){ fixed.checked=false; profitDiv.classList.remove('hidden'); fixedDiv.classList.add('hidden'); } else { profit.checked=true; } });
-      fixed.addEventListener('change',  () => { if (fixed.checked){ profit.checked=false; fixedDiv.classList.remove('hidden'); profitDiv.classList.add('hidden'); } else { fixed.checked=true; } });
+      const fixedDiv = el('fixedPriceDiv');
+      const handleCalcMethodChange = () => {
+          profitDiv.classList.toggle('hidden', !profitRadio.checked);
+          fixedDiv.classList.toggle('hidden', !fixedRadio.checked);
+      };
+      profitRadio.addEventListener('change', handleCalcMethodChange);
+      fixedRadio.addEventListener('change', handleCalcMethodChange);
 
       // Buttons
       el('calculateButton').addEventListener('click', calculateCosts);
@@ -585,17 +663,16 @@
       el('addBatteryButton').addEventListener('click', addBatteryRow);
       el('addBmsButton').addEventListener('click', addBmsRow);
 
-      // Init rows
+      // --- Init ---
       addBatteryRow();
       addBmsRow();
-      for (let i=0;i<5;i++) addAdditionalCostField();
-
-      // Init panel/inverter row totals
-      updatePriceFromSelect('panelModel','panelPrice',46.99); updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
-      updatePriceFromSelect('inverterModel','inverterPrice',849.48); updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
-
-      // Ensure transport displays are zeroed
-      ['panelTransportTotalDisplay','inverterTransportTotalDisplay','batteryTransportTotalDisplay'].forEach(id => { if (el(id)) el(id).value = (parseFloat(el(id).value)||0).toFixed(2); });
+      addAdditionalCostField();
+      updatePriceFromSelect('panelModel','panelPrice',46.99);
+      updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
+      updatePriceFromSelect('inverterModel','inverterPrice',849.48);
+      updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
+      updateWpBasedTotals();
+      updateAllSubtotals();
     });
   </script>
 </body>
