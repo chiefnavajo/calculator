@@ -92,34 +92,11 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M4.929 12a7 7 0 1114 0c0 1.573-.393 3.09-1.144 4.41L17.7 17.7a7 7 0 01-5.7 3.3c-.927 0-1.82-.187-2.65-.544l-.23-.09A7.001 7.001 0 014.93 12z"/></svg>
           Wechselrichter
         </h2>
-        <div class="grid md:grid-cols-4 gap-4">
-          <div>
-            <label for="inverterModel" class="block text-sm font-medium text-gray-700">Modell</label>
-            <select id="inverterModel" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2">
-              <option value="10000" data-price="1238.78">SUN2000-10K-MAP0 (10kW, hybrid, 3-phasig) - 1238,78 €</option>
-              <option value="10000" data-price="1174.00">SUN2000-10KTL-LC0 (10kW, hybrid, 1-phasig) - 1174,00 €</option>
-              <option value="10000" data-price="849.48" selected>SUN2000-10KTL-M1-HC (10kW, hybrid, 3-phasig, high-current) - 849,48 €</option>
-              <option value="12000" data-price="1337.87">SUN2000-12K-MAP0 (12kW, hybrid, 3-phasig) - 1337,87 €</option>
-              <option value="12000" data-price="815.62">SUN2000-12KTL-M5 (12kW, on-grid, 3-phasig) - 815,62 €</option>
-              <option value="15000" data-price="984.37">SUN2000-15KTL-M5 (15kW, on-grid, 3-phasig) - 984,37 €</option>
-              <option value="17000" data-price="1015.62">SUN2000-17KTL-M5 (17kW, on-grid, 3-phasig) - 1015,62 €</option>
-              <option value="8000" data-price="719.99">SUN2000-8KTL-M1-HC (8kW, hybrid, 3-phasig, high-current) - 719,99 €</option>
-              <option value="1" data-price="265.58">EMMA-A02 (Energy Management Assistant) - 265,58 €</option>
-            </select>
-          </div>
-          <div>
-            <label for="inverterCount" class="block text-sm font-medium text-gray-700">Anzahl</label>
-            <input type="number" id="inverterCount" value="1" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="inverterPrice" class="block text-sm font-medium text-gray-700">Kosten pro Einheit (€)</label>
-            <input type="number" id="inverterPrice" value="849.48" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
-          </div>
-          <div>
-            <label for="inverterRowTotal" class="block text-sm font-medium text-gray-700">Gesamtkosten (€)</label>
-            <input type="text" id="inverterRowTotal" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 font-bold text-right num" value="0.00" readonly />
-          </div>
+        <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-semibold text-gray-700">Wechselrichter</h3>
+            <button type="button" id="addInverterButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiterer Wechselrichter</button>
         </div>
+        <div id="inverterItems" class="space-y-3"></div>
         <div class="mt-4 grid md:grid-cols-4 gap-4">
           <div>
             <label for="inverterShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
@@ -338,7 +315,31 @@
         p.value = (price || 0).toFixed(2);
       };
 
-      // --- Dynamic Batteries & BMS ---
+      // --- Dynamic Inverters, Batteries & BMS ---
+      const inverterOptionsHtml = `
+        <option value="10000" data-price="1238.78">SUN2000-10K-MAP0 (10kW, hybrid, 3-phasig) - 1238,78 €</option>
+        <option value="10000" data-price="1174.00">SUN2000-10KTL-LC0 (10kW, hybrid, 1-phasig) - 1174,00 €</option>
+        <option value="10000" data-price="849.48" selected>SUN2000-10KTL-M1-HC (10kW, hybrid, 3-phasig, high-current) - 849,48 €</option>
+        <option value="12000" data-price="1337.87">SUN2000-12K-MAP0 (12kW, hybrid, 3-phasig) - 1337,87 €</option>
+        <option value="12000" data-price="815.62">SUN2000-12KTL-M5 (12kW, on-grid, 3-phasig) - 815,62 €</option>
+        <option value="15000" data-price="984.37">SUN2000-15KTL-M5 (15kW, on-grid, 3-phasig) - 984,37 €</option>
+        <option value="17000" data-price="1857.88">HUAWEI SUN2000-17K-MB0 (17 kW, hybrid, 3-phasig) - 1.857,88 €</option>
+        <option value="17000" data-price="659.89">HUAWEI SUN2000-17KTL-M2-HC (17 kW, on-grid, 3-phasig) - 659,89 €</option>
+        <option value="17000" data-price="1015.62">HUAWEI SUN2000-17KTL-M5 (17 kW, on-grid, 3-phasig) - 1.015,62 €</option>
+        <option value="17000" data-price="1788.00">HUAWEI SUN2000-17KTL-M2 (17 kW, on-grid, 3-phasig) - 1.788,00 €</option>
+        <option value="185000" data-price="4351.31">HUAWEI SUN2000-185KTL-H1 (185 kW, on-grid, 3-phasig) - 4.351,31 €</option>
+        <option value="215000" data-price="5417.89">HUAWEI SUN2000-215KTL-H0 (215 kW, on-grid, 3-phasig) - 5.417,89 €</option>
+        <option value="30000" data-price="1874.00">HUAWEI SUN2000-30KTL-M3 (30 kW, on-grid, 3-phasig) - 1.874,00 €</option>
+        <option value="330000" data-price="7383.20">HUAWEI SUN2000-330KTL-H1 (330 kW, on-grid, 3-phasig) - 7.383,20 €</option>
+        <option value="36000" data-price="2139.00">HUAWEI SUN2000-36KTL-M3 (36 kW, on-grid, 3-phasig) - 2.139,00 €</option>
+        <option value="40000" data-price="2255.00">HUAWEI SUN2000-40KTL-M3 (40 kW, on-grid, 3-phasig) - 2.255,00 €</option>
+        <option value="50000" data-price="2311.58">HUAWEI SUN2000-50KTL-M3 (50 kW, on-grid, 3-phasig) - 2.311,58 €</option>
+        <option value="100000" data-price="3704.35">HUAWEI SUN2000-100KTL-M2 (100 kW, on-grid, 3-phasig) - 3.704,35 €</option>
+        <option value="115000" data-price="3712.85">HUAWEI SUN2000-115KTL-M2 (115 kW, on-grid, 3-phasig) - 3.712,85 €</option>
+        <option value="8000" data-price="719.99">SUN2000-8KTL-M1-HC (8kW, hybrid, 3-phasig, high-current) - 719,99 €</option>
+        <option value="1" data-price="265.58">EMMA-A02 (Energy Management Assistant) - 265,58 €</option>
+      `;
+
       const batteryOptionsHtml = `
         <option value="5000" data-price="1598.00">Huawei LUNA2000-5-E0 (Batteriemodul 5kWh) - 1598,00 €</option>
         <option value="7000" data-price="2229.00">Huawei LUNA2000-7-E1 (Batteriemodul 6,9KWh) - 2229,00 €</option>
@@ -351,25 +352,72 @@
         <option value="10000" data-price="799.00">Huawei LUNA2000-10KW-C1 (10 kW Steuermodul) - 799,00 €</option>
         <option value="5000" data-price="629.00" selected>Huawei LUNA2000-5KW-C0 (5 kW Steuermodul) - 629,00 €</option>`;
 
+      const addInverterRow = () => {
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-12 gap-4 inverter-row items-end pb-2';
+        row.innerHTML = `
+          <div class="col-span-11 grid md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Modell</label>
+              <select class="inverter-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${inverterOptionsHtml}</select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Anzahl</label>
+              <input type="number" class="inverter-count mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="1" min="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Kosten pro Einheit (€)</label>
+              <input type="number" class="inverter-price mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="849.48" min="0" step="0.01" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Gesamtkosten (€)</label>
+              <input type="text" class="inverter-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
+            </div>
+          </div>
+          <div class="col-span-1 flex items-center justify-center">
+             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </button>
+          </div>
+          `;
+        el('inverterItems').appendChild(row);
+        const sel = row.querySelector('.inverter-model');
+        const priceInput = row.querySelector('.inverter-price');
+        const opt = sel.options[sel.selectedIndex];
+        priceInput.value = (opt?.dataset?.price ? parseFloat(opt.dataset.price) : 0).toFixed(2);
+        updateRowTotalByInputs(qs('.inverter-count', row), priceInput, qs('.inverter-total', row));
+      };
+
       const addBatteryRow = () => {
         const row = document.createElement('div');
-        row.className = 'grid md:grid-cols-4 gap-4 battery-row';
+        row.className = 'grid grid-cols-12 gap-4 battery-row items-end pb-2';
         row.innerHTML = `
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Modell</label>
-            <select class="battery-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${batteryOptionsHtml}</select>
+          <div class="col-span-11 grid md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Modell</label>
+              <select class="battery-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${batteryOptionsHtml}</select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Anzahl</label>
+              <input type="number" class="battery-count mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="0" min="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Kosten pro Einheit (€)</label>
+              <input type="number" class="battery-price mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="1598.00" min="0" step="0.01" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Gesamtkosten (€)</label>
+              <input type="text" class="battery-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Anzahl</label>
-            <input type="number" class="battery-count mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="0" min="0" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Kosten pro Einheit (€)</label>
-            <input type="number" class="battery-price mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="1598.00" min="0" step="0.01" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Gesamtkosten (€)</label>
-            <input type="text" class="battery-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
+          <div class="col-span-1 flex items-center justify-center">
+             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </button>
           </div>`;
         el('batteryItems').appendChild(row);
         const sel = row.querySelector('.battery-model');
@@ -380,23 +428,32 @@
 
       const addBmsRow = () => {
         const row = document.createElement('div');
-        row.className = 'grid md:grid-cols-4 gap-4 bms-row';
+        row.className = 'grid grid-cols-12 gap-4 bms-row items-end pb-2';
         row.innerHTML = `
-          <div>
-            <label class="block text-sm font-medium text-gray-700">BMS-Modell</label>
-            <select class="bms-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${bmsOptionsHtml}</select>
+          <div class="col-span-11 grid md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">BMS-Modell</label>
+              <select class="bms-model mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">${bmsOptionsHtml}</select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Menge</label>
+              <input type="number" class="bms-count mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="0" min="0" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">BMS-Preis (€)</label>
+              <input type="number" class="bms-price mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="629.00" min="0" step="0.01" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Gesamtkosten (€)</label>
+              <input type="text" class="bms-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Menge</label>
-            <input type="number" class="bms-count mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="0" min="0" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">BMS-Preis (€)</label>
-            <input type="number" class="bms-price mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="629.00" min="0" step="0.01" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Gesamtkosten (€)</label>
-            <input type="text" class="bms-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
+          <div class="col-span-1 flex items-center justify-center">
+             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </button>
           </div>`;
         el('bmsItems').appendChild(row);
         const sel = row.querySelector('.bms-model');
@@ -409,26 +466,35 @@
         const container = el('additionalCostsContainer');
         const index = container.children.length; if (index >= 10) return;
         const div = document.createElement('div');
-        div.className = 'grid md:grid-cols-4 gap-2 border-t border-slate-200 pt-4 additional-cost-row';
+        div.className = 'grid grid-cols-12 gap-4 additional-cost-row items-end pb-2 border-t border-slate-200 pt-4';
         div.innerHTML = `
-          <div>
-            <label for="addCostDesc_${index}" class="block text-sm font-medium text-gray-700">Beschreibung</label>
-            <input type="text" id="addCostDesc_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="z.B. Überwachung" />
+          <div class="col-span-11 grid md:grid-cols-4 gap-2">
+            <div>
+              <label for="addCostDesc_${index}" class="block text-sm font-medium text-gray-700">Beschreibung</label>
+              <input type="text" id="addCostDesc_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" placeholder="z.B. Überwachung" />
+            </div>
+            <div>
+              <label for="addCostType_${index}" class="block text-sm font-medium text-gray-700">Kostenart</label>
+              <select id="addCostType_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+                <option value="perWp">pro Wp (€)</option>
+                <option value="perPiece">pro Stück (€)</option>
+              </select>
+            </div>
+            <div>
+              <label for="addCostQty_${index}" class="block text-sm font-medium text-gray-700">Menge</label>
+              <input type="number" id="addCostQty_${index}" value="1" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
+            </div>
+            <div>
+              <label for="addCostPrice_${index}" class="block text-sm font-medium text-gray-700">Preis</label>
+              <input type="number" id="addCostPrice_${index}" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
+            </div>
           </div>
-          <div>
-            <label for="addCostType_${index}" class="block text-sm font-medium text-gray-700">Kostenart</label>
-            <select id="addCostType_${index}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-              <option value="perWp">pro Wp (€)</option>
-              <option value="perPiece">pro Stück (€)</option>
-            </select>
-          </div>
-          <div>
-            <label for="addCostQty_${index}" class="block text-sm font-medium text-gray-700">Menge</label>
-            <input type="number" id="addCostQty_${index}" value="1" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
-          </div>
-          <div>
-            <label for="addCostPrice_${index}" class="block text-sm font-medium text-gray-700">Preis</label>
-            <input type="number" id="addCostPrice_${index}" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
+          <div class="col-span-1 flex items-center justify-center">
+             <button type="button" class="delete-row-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </button>
           </div>`;
         container.appendChild(div);
         qsa('.additional-cost-row input, .additional-cost-row select').forEach(input => {
@@ -442,16 +508,17 @@
         const panelModel = parseFloat(el('panelModel').value) || 0;
         const panelCount = parseFloat(el('panelCount').value) || 0;
         const totalPowerWp = panelCount * panelModel;
-        for (let i = 0; i < container.children.length; i++) {
-            const type = el(`addCostType_${i}`)?.value;
-            const qty  = parseFloat(el(`addCostQty_${i}`)?.value) || 0;
-            const price= parseFloat(el(`addCostPrice_${i}`)?.value) || 0;
+        
+        qsa('.additional-cost-row').forEach((row, index) => {
+            const type = qs(`#addCostType_${index}`)?.value;
+            const qty  = numVal(qs(`#addCostQty_${index}`));
+            const price= numVal(qs(`#addCostPrice_${index}`));
             if (type === 'perWp') {
                 total += price * totalPowerWp;
             } else {
                 total += qty * price;
             }
-        }
+        });
         return total;
       };
 
@@ -462,9 +529,12 @@
         el('subtotalPanels').value = (panelTotal + panelTransport).toFixed(2);
 
         // Inverter Subtotal
-        const inverterTotal = numVal(el('inverterRowTotal'));
+        let inverterMaterialTotal = 0;
+        qsa('.inverter-row').forEach(row => {
+            inverterMaterialTotal += numVal(qs('.inverter-total', row));
+        });
         const inverterTransport = numVal(el('inverterTransportTotalDisplay'));
-        el('subtotalInverter').value = (inverterTotal + inverterTransport).toFixed(2);
+        el('subtotalInverter').value = (inverterMaterialTotal + inverterTransport).toFixed(2);
 
         // Storage Subtotal
         let batteryTotal = 0;
@@ -496,9 +566,13 @@
         const panelCount = parseFloat(el('panelCount').value) || 0;
         const panelPrice = parseFloat(el('panelPrice').value) || 0;
         const panelTransportTotal = numVal(el('panelTransportTotalDisplay'));
-        const inverterCount = parseFloat(el('inverterCount').value) || 0;
-        const inverterPrice = parseFloat(el('inverterPrice').value) || 0;
+        
+        let inverterTotalCost = 0;
+        qsa('.inverter-row').forEach(row => {
+          inverterTotalCost += numVal(qs('.inverter-total', row));
+        });
         const inverterTransportTotal = numVal(el('inverterTransportTotalDisplay'));
+
         let batteriesTotalCost = 0;
         qsa('.battery-row').forEach(row => {
           batteriesTotalCost += numVal(qs('.battery-total', row));
@@ -513,7 +587,6 @@
         const totalPowerWp = panelCount * panelModel;
         const totalPowerKwp = totalPowerWp / 1000;
         const panelsTotalCost = panelCount * panelPrice;
-        const inverterTotalCost = inverterCount * inverterPrice;
         const batteryTotalCost = batteriesTotalCost + bmsTotalCost;
         const constructionTotalCost = totalPowerWp * constructionCostPerWp;
         const accessoriesTotalCost = totalPowerWp * accessoriesCostPerWp;
@@ -576,19 +649,28 @@
           updateAllSubtotals();
       }));
 
-      // Inverter
-      el('inverterModel').addEventListener('change', () => { 
-          updatePriceFromSelect('inverterModel','inverterPrice', 849.48); 
-          updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
-          updateAllSubtotals();
+      // Dynamic Inverters
+      el('inverterItems').addEventListener('click', (e) => {
+        if (e.target.closest('.delete-row-btn')) {
+            e.target.closest('.inverter-row').remove();
+            updateAllSubtotals();
+        }
       });
-      el('inverterCount').addEventListener('input', () => {
-          updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
-          updateAllSubtotals();
+      el('inverterItems').addEventListener('change', (e) => {
+          if (e.target.classList.contains('inverter-model')) {
+              const row = e.target.closest('.inverter-row');
+              const opt = e.target.options[e.target.selectedIndex];
+              qs('.inverter-price', row).value = (opt?.dataset?.price ? parseFloat(opt.dataset.price) : 0).toFixed(2);
+              updateRowTotalByInputs(qs('.inverter-count', row), qs('.inverter-price', row), qs('.inverter-total', row));
+              updateAllSubtotals();
+          }
       });
-      el('inverterPrice').addEventListener('input', () => {
-          updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
-          updateAllSubtotals();
+      el('inverterItems').addEventListener('input', (e) => {
+          if (e.target.classList.contains('inverter-count') || e.target.classList.contains('inverter-price')) {
+              const row = e.target.closest('.inverter-row');
+              updateRowTotalByInputs(qs('.inverter-count', row), qs('.inverter-price', row), qs('.inverter-total', row));
+              updateAllSubtotals();
+          }
       });
       ['inverterTransportCount','inverterTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
           updateTransportTotal('inverterTransportCount','inverterTransportPrice','inverterTransportTotalDisplay');
@@ -612,6 +694,12 @@
       });
 
       // Dynamic Rows
+      el('batteryItems').addEventListener('click', (e) => {
+        if (e.target.closest('.delete-row-btn')) {
+            e.target.closest('.battery-row').remove();
+            updateAllSubtotals();
+        }
+      });
       el('batteryItems').addEventListener('change', (e) => {
           if (e.target.classList.contains('battery-model')) {
               const row = e.target.closest('.battery-row');
@@ -627,6 +715,12 @@
               updateRowTotalByInputs(qs('.battery-count', row), qs('.battery-price', row), qs('.battery-total', row));
               updateAllSubtotals();
           }
+      });
+       el('bmsItems').addEventListener('click', (e) => {
+        if (e.target.closest('.delete-row-btn')) {
+            e.target.closest('.bms-row').remove();
+            updateAllSubtotals();
+        }
       });
        el('bmsItems').addEventListener('change', (e) => {
           if (e.target.classList.contains('bms-model')) {
@@ -644,6 +738,12 @@
               updateAllSubtotals();
           }
       });
+      el('additionalCostsContainer').addEventListener('click', (e) => {
+        if (e.target.closest('.delete-row-btn')) {
+            e.target.closest('.additional-cost-row').remove();
+            updateAllSubtotals();
+        }
+      });
 
       // Profit vs Fixed
       const profitRadio = el('useProfitMargin');
@@ -659,23 +759,21 @@
 
       // Buttons
       el('calculateButton').addEventListener('click', calculateCosts);
+      el('addInverterButton').addEventListener('click', addInverterRow);
       el('addCostButton').addEventListener('click', addAdditionalCostField);
       el('addBatteryButton').addEventListener('click', addBatteryRow);
       el('addBmsButton').addEventListener('click', addBmsRow);
 
       // --- Init ---
+      addInverterRow();
       addBatteryRow();
       addBmsRow();
       addAdditionalCostField();
       updatePriceFromSelect('panelModel','panelPrice',46.99);
       updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
-      updatePriceFromSelect('inverterModel','inverterPrice',849.48);
-      updateRowTotalByIds('inverterCount','inverterPrice','inverterRowTotal');
       updateWpBasedTotals();
       updateAllSubtotals();
     });
   </script>
 </body>
 </html>
-
-
