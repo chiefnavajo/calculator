@@ -8,8 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0CsdC3E_IH8Hl9ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" xintegrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" xintegrity="sha512-r229EsTNUvG4iFksjxQVPi_IeCoJoSOgq2iOKvWALaqr2hr5F1d_1rNjQkCThQhDCRDLQoQexiB28Mv8GvA5wA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
     body{font-family:'Inter',sans-serif}
     body::-webkit-scrollbar{width:8px}
@@ -240,7 +239,7 @@
 
       <div class="flex flex-col sm:flex-row justify-center gap-4">
         <button type="button" id="calculateButton" class="w-full md:w-auto px-8 py-4 bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition-colors font-bold text-lg">Kosten berechnen</button>
-        <button type="button" id="generatePdfButton" class="w-full md:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-700 transition-colors font-bold text-lg hidden">PDF Dokument generieren</button>
+        <button type="button" id="generateExcelButton" class="w-full md:w-auto px-8 py-4 bg-emerald-600 text-white rounded-xl shadow-lg hover:bg-emerald-700 transition-colors font-bold text-lg hidden">Excel Export generieren</button>
       </div>
     </form>
 
@@ -627,7 +626,7 @@
         setText('result-totalEPCCostPerWp', safeDiv(totalEPCCost, totalPowerWp));
         setText('result-finalClientPrice', finalClientPrice.toFixed(2));
         el('results').classList.remove('hidden');
-        el('generatePdfButton').classList.remove('hidden');
+        el('generateExcelButton').classList.remove('hidden');
       };
 
       // --- Event Listeners ---
@@ -767,53 +766,76 @@
       el('addBatteryButton').addEventListener('click', addBatteryRow);
       el('addBmsButton').addEventListener('click', addBmsRow);
 
-      el('generatePdfButton').addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
-        const content = el('pdf-content');
-        const pdfButton = el('generatePdfButton');
+    el('generateExcelButton').addEventListener('click', () => {
+        const excelData = [];
+        excelData.push(["Komponente / Beschreibung", "Anzahl", "Einzelpreis (€)", "Gesamtkosten (€)"]);
+        
+        // Module
+        excelData.push(["Module", "", "", ""]);
+        excelData.push([qs('#panelModel option:checked').text, numVal(el('panelCount')), numVal(el('panelPrice')), numVal(el('panelRowTotal'))]);
+        excelData.push(["Transport Module", "", "", numVal(el('panelTransportTotalDisplay'))]);
+        excelData.push([]); // Spacer
 
-        pdfButton.innerText = 'PDF wird erstellt...';
-        pdfButton.disabled = true;
-
-        html2canvas(content, {
-            scale: 2,
-            useCORS: true,
-            windowWidth: content.scrollWidth,
-            windowHeight: content.scrollHeight
-        }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF({
-                orientation: 'p',
-                unit: 'mm',
-                format: 'a4'
-            });
-
-            const imgProps= pdf.getImageProperties(imgData);
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            
-            let heightLeft = pdfHeight;
-            let position = 0;
-
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            heightLeft -= pdf.internal.pageSize.getHeight();
-
-            while (heightLeft >= 0) {
-              position = heightLeft - pdfHeight;
-              pdf.addPage();
-              pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-              heightLeft -= pdf.internal.pageSize.getHeight();
-            }
-            pdf.save('kostenaufstellung.pdf');
-
-            pdfButton.innerText = 'PDF Dokument generieren';
-            pdfButton.disabled = false;
-        }).catch(err => {
-            console.error("Fehler bei der PDF-Erstellung:", err);
-            pdfButton.innerText = 'PDF Dokument generieren';
-            pdfButton.disabled = false;
+        // Wechselrichter
+        excelData.push(["Wechselrichter", "", "", ""]);
+        qsa('.inverter-row').forEach(row => {
+            excelData.push([
+                qs('.inverter-model option:checked', row).text,
+                numVal(qs('.inverter-count', row)),
+                numVal(qs('.inverter-price', row)),
+                numVal(qs('.inverter-total', row))
+            ]);
         });
+        excelData.push(["Transport Wechselrichter", "", "", numVal(el('inverterTransportTotalDisplay'))]);
+        excelData.push([]); // Spacer
+
+        // Speicher
+        excelData.push(["Speicher", "", "", ""]);
+        qsa('.battery-row').forEach(row => {
+            excelData.push([
+                qs('.battery-model option:checked', row).text,
+                numVal(qs('.battery-count', row)),
+                numVal(qs('.battery-price', row)),
+                numVal(qs('.battery-total', row))
+            ]);
+        });
+        qsa('.bms-row').forEach(row => {
+            excelData.push([
+                qs('.bms-model option:checked', row).text,
+                numVal(qs('.bms-count', row)),
+                numVal(qs('.bms-price', row)),
+                numVal(qs('.bms-total', row))
+            ]);
+        });
+        excelData.push(["Transport Speicher", "", "", numVal(el('batteryTransportTotalDisplay'))]);
+        excelData.push([]); // Spacer
+
+        // Verschiedene Kosten
+        excelData.push(["Verschiedene Kosten", "", "", ""]);
+        excelData.push(["Unterkonstruktion", `${numVal(el('constructionCost'))} €/Wp`, "", numVal(el('constructionTotalDisplay'))]);
+        excelData.push(["Montagekosten", `${numVal(el('accessoriesCost'))} €/Wp`, "", numVal(el('accessoriesTotalDisplay'))]);
+        qsa('.additional-cost-row').forEach((row, index) => {
+            excelData.push([
+                qs(`#addCostDesc_${index}`).value || `Zusatzkosten ${index + 1}`,
+                numVal(qs(`#addCostQty_${index}`)),
+                numVal(qs(`#addCostPrice_${index}`)),
+                (numVal(qs(`#addCostQty_${index}`)) * numVal(qs(`#addCostPrice_${index}`)))
+            ]);
+        });
+        excelData.push([]); // Spacer
+
+        // Zusammenfassung
+        excelData.push(["Zusammenfassung", "", "", ""]);
+        excelData.push(["Gesamtanlagenleistung", el('result-totalPower').innerText, "", ""]);
+        excelData.push(["GESAMTE EPC-KOSTEN", "", "", el('result-totalEPCCost').innerText]);
+        excelData.push(["ENDPREIS FÜR KUNDEN", "", "", el('result-finalClientPrice').innerText]);
+
+        const ws = XLSX.utils.aoa_to_sheet(excelData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Kostenaufstellung');
+        XLSX.writeFile(wb, "kostenaufstellung_komplett.xlsx");
     });
+
 
       // --- Init ---
       addInverterRow();
