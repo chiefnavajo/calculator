@@ -88,8 +88,27 @@
             <input type="text" id="panelRowTotal" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 font-bold text-right num" value="0.00" readonly />
           </div>
         </div>
-        <div id="panelShipmentItems" class="space-y-3 mt-4"></div>
-        <button type="button" id="addPanelShipmentButton" class="text-sm text-green-600 hover:text-green-800 transition-colors mt-2">+ weitere Sendung hinzufügen</button>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label for="panelShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
+            <select id="panelShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+              <option value="package">Paket</option>
+              <option value="pallet">Europalette</option>
+            </select>
+          </div>
+          <div>
+            <label for="panelTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
+            <input type="number" id="panelTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+          </div>
+          <div>
+            <label for="panelTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
+            <input type="number" id="panelTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Transport Gesamt (€)</label>
+            <input type="text" id="panelTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
+          </div>
+        </div>
         <div class="mt-4 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
             <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Module</span>
             <input type="text" id="subtotalPanels" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
@@ -107,8 +126,27 @@
             <button type="button" id="addInverterButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiterer Wechselrichter</button>
         </div>
         <div id="inverterItems" class="space-y-3"></div>
-        <div id="inverterShipmentItems" class="space-y-3 mt-4"></div>
-        <button type="button" id="addInverterShipmentButton" class="text-sm text-green-600 hover:text-green-800 transition-colors mt-2">+ weitere Sendung hinzufügen</button>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label for="inverterShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
+            <select id="inverterShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+              <option value="package">Paket</option>
+              <option value="pallet">Europalette</option>
+            </select>
+          </div>
+          <div>
+            <label for="inverterTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
+            <input type="number" id="inverterTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+          </div>
+          <div>
+            <label for="inverterTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
+            <input type="number" id="inverterTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Transport Gesamt (€)</label>
+            <input type="text" id="inverterTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
+          </div>
+        </div>
         <div class="mt-4 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
             <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Wechselrichter</span>
             <input type="text" id="subtotalInverter" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
@@ -121,18 +159,43 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 3.363-2.73 6.093-6.093 6.093h-.758v1.365c0 1.258-.87 2.308-2.008 2.531a2.383 2.383 0 01-2.083-2.327l.006-.173V12.75H4.125c-3.363 0-6.093-2.73-6.093-6.093S.762.282 4.125.282h12.031c3.363 0 6.093 2.73 6.093 6.093zm-5.625 2.25v-3.75h-8.25v3.75h8.25z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12.375 14.25v-1.5h-1.5v1.5h1.5z" transform="rotate(90 12.375 14.25)"/></svg>
           Speicher (Optional)
         </h2>
+
+        <!-- Batteries: dynamic list -->
         <div class="flex items-center justify-between mb-2">
           <h3 class="text-lg font-semibold text-gray-700">Batteriemodule</h3>
           <button type="button" id="addBatteryButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiteres Batteriemodul</button>
         </div>
         <div id="batteryItems" class="space-y-3"></div>
+
+        <!-- BMS: dynamic list -->
         <div class="flex items-center justify-between mt-6 mb-2">
           <h3 class="text-lg font-semibold text-gray-700">BMS / Steuermodul(e)</h3>
           <button type="button" id="addBmsButton" class="text-sm text-green-600 hover:text-green-800 transition-colors">+ weiteres BMS</button>
         </div>
         <div id="bmsItems" class="space-y-3"></div>
-        <div id="batteryShipmentItems" class="space-y-3 mt-6"></div>
-        <button type="button" id="addBatteryShipmentButton" class="text-sm text-green-600 hover:text-green-800 transition-colors mt-2">+ weitere Sendung hinzufügen</button>
+
+        <!-- Transport -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label for="batteryShipmentType" class="block text-sm font-medium text-gray-700">Art der Sendung</label>
+            <select id="batteryShipmentType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+              <option value="package">Paket</option>
+              <option value="pallet">Europalette</option>
+            </select>
+          </div>
+          <div>
+            <label for="batteryTransportCount" class="block text-sm font-medium text-gray-700">Menge (Transport)</label>
+            <input type="number" id="batteryTransportCount" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+          </div>
+          <div>
+            <label for="batteryTransportPrice" class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
+            <input type="number" id="batteryTransportPrice" value="0" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Transport Gesamt (€)</label>
+            <input type="text" id="batteryTransportTotalDisplay" value="0.00" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" readonly />
+          </div>
+        </div>
         <div class="mt-6 pt-4 border-t-2 border-slate-300 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2">
             <span class="font-bold text-gray-700 text-lg sm:mr-2">Zwischensumme Speicher</span>
             <input type="text" id="subtotalStorage" class="w-full sm:w-1/4 rounded-md border-gray-300 shadow-sm p-2 bg-slate-200 font-bold text-right num" value="0.00" readonly />
@@ -237,6 +300,7 @@
             <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Wechselrichter</td><td id="result-inverterTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-inverterTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
             <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Speicher</td><td id="result-batteryTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-batteryTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
             <tr class="bg-gray-100 font-bold"><td class="px-2 py-3 sm:px-6 sm:py-4 text-base text-gray-900">GESAMTE EPC-KOSTEN</td><td id="result-totalEPCCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td><td id="result-totalEPCCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td></tr>
+            <tr class="bg-gray-100 font-bold"><td class="px-2 py-3 sm:px-6 sm:py-4 text-base text-gray-900">Gewinn</td><td id="result-profit" colspan="2" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td></tr>
             <tr class="bg-green-100 font-bold text-green-800 text-lg"><td class="px-2 py-3 sm:px-6 sm:py-4">ENDPREIS FÜR KUNDEN</td><td id="result-finalClientPrice" colspan="2" class="px-2 py-3 sm:px-6 sm:py-4 text-right">0.00</td></tr>
           </tbody>
         </table>
@@ -263,6 +327,12 @@
         const count = numVal(el(countId));
         const price = numVal(el(priceId));
         el(totalId).value = (count * price).toFixed(2);
+      };
+
+      const updateTransportTotal = (countId, priceId, totalDisplayId) => {
+        const count = parseFloat(el(countId).value) || 0;
+        const price = parseFloat(el(priceId).value) || 0;
+        el(totalDisplayId).value = (count * price).toFixed(2);
       };
       
       const updatePriceFromSelect = (selectId, priceInputId, fallback) => {
@@ -464,51 +534,6 @@
         });
       };
       
-      const addShipmentRow = (containerId, prefix) => {
-        const container = el(containerId);
-        const row = document.createElement('div');
-        row.className = `flex flex-col sm:flex-row sm:items-end gap-2 ${prefix}-shipment-row shipment-row pb-2`;
-        row.innerHTML = `
-          <div class="flex-grow grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Art der Sendung</label>
-              <select class="shipment-type mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
-                <option value="package">Paket</option>
-                <option value="pallet">Europalette</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Menge</label>
-              <input type="number" class="shipment-count mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="0" min="0" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Preis/Einheit (€)</label>
-              <input type="number" class="shipment-price mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2" value="0" min="0" step="0.01" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Gesamt (€)</label>
-              <input type="text" class="shipment-total mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 bg-gray-100 text-right num" value="0.00" readonly />
-            </div>
-          </div>
-          <div class="flex-shrink-0">
-             <button type="button" class="delete-row-btn p-2 w-full sm:w-auto text-red-500 hover:text-red-700 hover:bg-red-100 rounded-md transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-            </button>
-          </div>
-        `;
-        container.appendChild(row);
-
-        row.addEventListener('input', () => {
-            const countInput = qs('.shipment-count', row);
-            const priceInput = qs('.shipment-price', row);
-            const totalInput = qs('.shipment-total', row);
-            updateRowTotalByInputs(countInput, priceInput, totalInput);
-            updateAllSubtotals();
-        });
-      };
-
       const getAdditionalCostsTotal = () => {
         let total = 0;
         const container = el('additionalCostsContainer');
@@ -532,33 +557,24 @@
       const updateAllSubtotals = () => {
         // Panel Subtotal
         const panelTotal = numVal(el('panelRowTotal'));
-        let panelTransportTotal = 0;
-        qsa('#panelShipmentItems .shipment-row').forEach(row => {
-            panelTransportTotal += numVal(qs('.shipment-total', row));
-        });
-        el('subtotalPanels').value = (panelTotal + panelTransportTotal).toFixed(2);
+        const panelTransport = numVal(el('panelTransportTotalDisplay'));
+        el('subtotalPanels').value = (panelTotal + panelTransport).toFixed(2);
 
         // Inverter Subtotal
         let inverterMaterialTotal = 0;
         qsa('.inverter-row').forEach(row => {
             inverterMaterialTotal += numVal(qs('.inverter-total', row));
         });
-        let inverterTransportTotal = 0;
-        qsa('#inverterShipmentItems .shipment-row').forEach(row => {
-            inverterTransportTotal += numVal(qs('.shipment-total', row));
-        });
-        el('subtotalInverter').value = (inverterMaterialTotal + inverterTransportTotal).toFixed(2);
+        const inverterTransport = numVal(el('inverterTransportTotalDisplay'));
+        el('subtotalInverter').value = (inverterMaterialTotal + inverterTransport).toFixed(2);
 
         // Storage Subtotal
         let batteryTotal = 0;
         qsa('.battery-total').forEach(inp => batteryTotal += numVal(inp));
         let bmsTotal = 0;
         qsa('.bms-total').forEach(inp => bmsTotal += numVal(inp));
-        let batteryTransportTotal = 0;
-        qsa('#batteryShipmentItems .shipment-row').forEach(row => {
-            batteryTransportTotal += numVal(qs('.shipment-total', row));
-        });
-        el('subtotalStorage').value = (batteryTotal + bmsTotal + batteryTransportTotal).toFixed(2);
+        const batteryTransport = numVal(el('batteryTransportTotalDisplay'));
+        el('subtotalStorage').value = (batteryTotal + bmsTotal + batteryTransport).toFixed(2);
 
         // Misc Costs Subtotal
         const constructionTotal = numVal(el('constructionTotalDisplay'));
@@ -581,20 +597,13 @@
         const panelModel = parseFloat(el('panelModel').value) || 0;
         const panelCount = parseFloat(el('panelCount').value) || 0;
         const panelPrice = parseFloat(el('panelPrice').value) || 0;
+        const panelTransportTotal = numVal(el('panelTransportTotalDisplay'));
         
-        let panelTransportTotal = 0;
-        qsa('#panelShipmentItems .shipment-row').forEach(row => {
-            panelTransportTotal += numVal(qs('.shipment-total', row));
-        });
-
         let inverterTotalCost = 0;
         qsa('.inverter-row').forEach(row => {
           inverterTotalCost += numVal(qs('.inverter-total', row));
         });
-        let inverterTransportTotal = 0;
-        qsa('#inverterShipmentItems .shipment-row').forEach(row => {
-            inverterTransportTotal += numVal(qs('.shipment-total', row));
-        });
+        const inverterTransportTotal = numVal(el('inverterTransportTotalDisplay'));
 
         let batteriesTotalCost = 0;
         qsa('.battery-row').forEach(row => {
@@ -604,11 +613,7 @@
         qsa('.bms-row').forEach(row => {
           bmsTotalCost += numVal(qs('.bms-total', row));
         });
-        let batteryTransportTotal = 0;
-        qsa('#batteryShipmentItems .shipment-row').forEach(row => {
-            batteryTransportTotal += numVal(qs('.shipment-total', row));
-        });
-
+        const batteryTransportTotal = numVal(el('batteryTransportTotalDisplay'));
         const constructionCostPerWp = parseFloat(el('constructionCost').value) || 0;
         const accessoriesCostPerWp = parseFloat(el('accessoriesCost').value) || 0;
         const totalPowerWp = panelCount * panelModel;
@@ -629,6 +634,9 @@
           const fx = parseFloat(el('fixedPricePerKwp').value) || 0;
           finalClientPrice = totalPowerKwp * fx;
         }
+        
+        const profit = finalClientPrice - totalEPCCost;
+
         setText('result-totalPower', `${totalPowerWp} Wp (${totalPowerKwp.toFixed(2)} kWp)`);
         setText('result-panelsCost', panelsTotalCost.toFixed(2));
         setText('result-panelsCostPerWp', safeDiv(panelsTotalCost, totalPowerWp));
@@ -650,6 +658,7 @@
         setText('result-batteryTransportUnitCost', safeDiv(batteryTransportTotal, totalPowerWp));
         setText('result-totalEPCCost', totalEPCCost.toFixed(2));
         setText('result-totalEPCCostPerWp', safeDiv(totalEPCCost, totalPowerWp));
+        setText('result-profit', profit.toFixed(2));
         setText('result-finalClientPrice', finalClientPrice.toFixed(2));
         el('results').classList.remove('hidden');
         el('generateExcelButton').classList.remove('hidden');
@@ -672,14 +681,10 @@
           updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
           updateAllSubtotals();
       });
-      el('panelShipmentItems').addEventListener('input', () => updateAllSubtotals());
-      el('panelShipmentItems').addEventListener('click', (e) => {
-        if (e.target.closest('.delete-row-btn')) {
-            e.target.closest('.panel-shipment-row').remove();
-            updateAllSubtotals();
-        }
-      });
-
+      ['panelTransportCount','panelTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
+          updateTransportTotal('panelTransportCount','panelTransportPrice','panelTransportTotalDisplay');
+          updateAllSubtotals();
+      }));
 
       // Dynamic Inverters
       el('inverterItems').addEventListener('click', (e) => {
@@ -704,22 +709,16 @@
               updateAllSubtotals();
           }
       });
-      el('inverterShipmentItems').addEventListener('input', () => updateAllSubtotals());
-       el('inverterShipmentItems').addEventListener('click', (e) => {
-        if (e.target.closest('.delete-row-btn')) {
-            e.target.closest('.inverter-shipment-row').remove();
-            updateAllSubtotals();
-        }
-      });
+      ['inverterTransportCount','inverterTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
+          updateTransportTotal('inverterTransportCount','inverterTransportPrice','inverterTransportTotalDisplay');
+          updateAllSubtotals();
+      }));
 
       // Battery transport
-       el('batteryShipmentItems').addEventListener('input', () => updateAllSubtotals());
-       el('batteryShipmentItems').addEventListener('click', (e) => {
-        if (e.target.closest('.delete-row-btn')) {
-            e.target.closest('.battery-shipment-row').remove();
-            updateAllSubtotals();
-        }
-      });
+      ['batteryTransportCount','batteryTransportPrice'].forEach(id => el(id)?.addEventListener('input', () => {
+          updateTransportTotal('batteryTransportCount','batteryTransportPrice','batteryTransportTotalDisplay');
+          updateAllSubtotals();
+      }));
 
       // Wp-based costs listeners
       el('constructionCost').addEventListener('input', () => {
@@ -801,10 +800,6 @@
       el('addCostButton').addEventListener('click', addAdditionalCostField);
       el('addBatteryButton').addEventListener('click', addBatteryRow);
       el('addBmsButton').addEventListener('click', addBmsRow);
-      el('addPanelShipmentButton').addEventListener('click', () => addShipmentRow('panelShipmentItems', 'panel'));
-      el('addInverterShipmentButton').addEventListener('click', () => addShipmentRow('inverterShipmentItems', 'inverter'));
-      el('addBatteryShipmentButton').addEventListener('click', () => addShipmentRow('batteryShipmentItems', 'battery'));
-
 
     el('generateExcelButton').addEventListener('click', () => {
         const wb = XLSX.utils.book_new();
@@ -824,11 +819,7 @@
         
         // Module
         allData.push(["Module", qs('#panelModel option:checked').text, numVal(el('panelCount')), numVal(el('panelPrice')), numVal(el('panelRowTotal'))]);
-        let panelTransportTotal = 0;
-        qsa('#panelShipmentItems .shipment-row').forEach(row => {
-            panelTransportTotal += numVal(qs('.shipment-total', row));
-        });
-        allData.push(["", "Transport Module", "", "", panelTransportTotal]);
+        allData.push(["", "Transport Module", "", "", numVal(el('panelTransportTotalDisplay'))]);
 
         // Wechselrichter
         qsa('.inverter-row').forEach(row => {
@@ -840,11 +831,7 @@
                 numVal(qs('.inverter-total', row))
             ]);
         });
-        let inverterTransportTotal = 0;
-        qsa('#inverterShipmentItems .shipment-row').forEach(row => {
-            inverterTransportTotal += numVal(qs('.shipment-total', row));
-        });
-        allData.push(["", "Transport Wechselrichter", "", "", inverterTransportTotal]);
+        allData.push(["", "Transport Wechselrichter", "", "", numVal(el('inverterTransportTotalDisplay'))]);
 
         // Speicher
         qsa('.battery-row').forEach(row => {
@@ -869,12 +856,8 @@
                 ]);
             }
         });
-        let batteryTransportTotal = 0;
-        qsa('#batteryShipmentItems .shipment-row').forEach(row => {
-            batteryTransportTotal += numVal(qs('.shipment-total', row));
-        });
-        if(batteryTransportTotal > 0) {
-            allData.push(["", "Transport Speicher", "", "", batteryTransportTotal]);
+        if(numVal(el('batteryTransportTotalDisplay')) > 0) {
+            allData.push(["", "Transport Speicher", "", "", numVal(el('batteryTransportTotalDisplay'))]);
         }
         
         // Verschiedene Kosten
@@ -897,19 +880,7 @@
         allData.push(["Zusammenfassung", "", "", "", ""]);
         allData.push(["Gesamtanlagenleistung", el('result-totalPower').innerText, "", "", ""]);
         allData.push(["GESAMTE EPC-KOSTEN", "", "", "", el('result-totalEPCCost').innerText]);
-        
-        const totalEPCCost = parseFloat(el('result-totalEPCCost').innerText);
-        const totalPowerWpText = el('result-totalPower').innerText;
-        const totalPowerWp = parseFloat(totalPowerWpText); 
-        
-        if (totalPowerWp > 0) {
-            const totalPowerKwp = totalPowerWp / 1000;
-            const costPerWp = (totalEPCCost / totalPowerWp).toFixed(2);
-            const costPerKwp = (totalEPCCost / totalPowerKwp).toFixed(2);
-            allData.push(["Gesamtkosten/Wp", "", "", "", costPerWp]);
-            allData.push(["Gesamtkosten/kWp", "", "", "", costPerKwp]);
-        }
-        
+        allData.push(["Gewinn (€)", "", "", "", el('result-profit').innerText]);
         allData.push(["ENDPREIS FÜR KUNDEN", "", "", "", el('result-finalClientPrice').innerText]);
 
         const ws = XLSX.utils.aoa_to_sheet(allData);
@@ -930,9 +901,6 @@
       addBatteryRow();
       addBmsRow();
       addAdditionalCostField();
-      addShipmentRow('panelShipmentItems', 'panel');
-      addShipmentRow('inverterShipmentItems', 'inverter');
-      addShipmentRow('batteryShipmentItems', 'battery');
       updatePriceFromSelect('panelModel','panelPrice',46.99);
       updateRowTotalByIds('panelCount','panelPrice','panelRowTotal');
       updateWpBasedTotals();
