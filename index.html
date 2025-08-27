@@ -280,7 +280,10 @@
         <table class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden shadow-sm">
           <thead class="bg-gray-50">
             <tr>
-              <th class="px-2 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Komponente</th>
+              <th class="px-2 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <input type="checkbox" id="toggle-all-costs" class="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                Komponente
+              </th>
               <th class="px-2 py-3 sm:px-6 sm:py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Gesamtkosten (€)</th>
               <th class="px-2 py-3 sm:px-6 sm:py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Kosten pro Wp (€/Wp)</th>
             </tr>
@@ -290,15 +293,78 @@
               <td class="px-2 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm font-medium text-gray-900">Gesamtanlagenleistung</td>
               <td id="result-totalPower" colspan="2" class="px-2 py-3 sm:px-6 sm:py-4 text-right whitespace-nowrap text-sm text-gray-500">0 Wp</td>
             </tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Module (Materialien)</td><td id="result-panelsCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-panelsCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Wechselrichter (Materialien)</td><td id="result-inverterCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-inverterCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Batteriemodule & BMS</td><td id="result-batteryCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-batteryCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Unterkonstruktion</td><td id="result-constructionTotalCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-constructionUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900">Montagekosten</td><td id="result-accessoriesTotalCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td><td id="result-accessoriesUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm font-bold text-gray-900">Zusätzliche Kosten</td><td id="result-additionalCostsTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td><td id="result-additionalCostsPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Module</td><td id="result-panelTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-panelTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Wechselrichter</td><td id="result-inverterTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-inverterTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
-            <tr><td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold">Transport Speicher</td><td id="result-batteryTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td><td id="result-batteryTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td></tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 flex items-center">
+                    <input type="checkbox" id="include-panelsCost" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-panelsCost">Module (Materialien)</label>
+                </td>
+                <td id="result-panelsCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+                <td id="result-panelsCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 flex items-center">
+                    <input type="checkbox" id="include-inverterCost" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-inverterCost">Wechselrichter (Materialien)</label>
+                </td>
+                <td id="result-inverterCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+                <td id="result-inverterCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 flex items-center">
+                    <input type="checkbox" id="include-batteryCost" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-batteryCost">Batteriemodule & BMS</label>
+                </td>
+                <td id="result-batteryCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+                <td id="result-batteryCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 flex items-center">
+                    <input type="checkbox" id="include-constructionTotalCost" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-constructionTotalCost">Unterkonstruktion</label>
+                </td>
+                <td id="result-constructionTotalCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+                <td id="result-constructionUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 flex items-center">
+                    <input type="checkbox" id="include-accessoriesTotalCost" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-accessoriesTotalCost">Montagekosten</label>
+                </td>
+                <td id="result-accessoriesTotalCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+                <td id="result-accessoriesUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm font-bold text-gray-900 flex items-center">
+                    <input type="checkbox" id="include-additionalCostsTotal" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-additionalCostsTotal">Zusätzliche Kosten</label>
+                </td>
+                <td id="result-additionalCostsTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td>
+                <td id="result-additionalCostsPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold flex items-center">
+                    <input type="checkbox" id="include-panelTransportTotal" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-panelTransportTotal">Transport Module</label>
+                </td>
+                <td id="result-panelTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td>
+                <td id="result-panelTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold flex items-center">
+                    <input type="checkbox" id="include-inverterTransportTotal" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-inverterTransportTotal">Transport Wechselrichter</label>
+                </td>
+                <td id="result-inverterTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td>
+                <td id="result-inverterTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold flex items-center">
+                    <input type="checkbox" id="include-batteryTransportTotal" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
+                    <label for="include-batteryTransportTotal">Transport Speicher</label>
+                </td>
+                <td id="result-batteryTransportTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td>
+                <td id="result-batteryTransportUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500 font-bold">0.00</td>
+            </tr>
             <tr class="bg-gray-100 font-bold"><td class="px-2 py-3 sm:px-6 sm:py-4 text-base text-gray-900">GESAMTE EPC-KOSTEN</td><td id="result-totalEPCCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td><td id="result-totalEPCCostPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td></tr>
             <tr class="bg-gray-100 font-bold"><td class="px-2 py-3 sm:px-6 sm:py-4 text-base text-gray-900">Gewinn</td><td id="result-profit" colspan="2" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-base text-gray-900">0.00</td></tr>
             <tr class="bg-green-100 font-bold text-green-800 text-lg"><td class="px-2 py-3 sm:px-6 sm:py-4">ENDPREIS FÜR KUNDEN</td><td id="result-finalClientPrice" colspan="2" class="px-2 py-3 sm:px-6 sm:py-4 text-right">0.00</td></tr>
@@ -623,9 +689,18 @@
         const constructionTotalCost = totalPowerWp * constructionCostPerWp;
         const accessoriesTotalCost = totalPowerWp * accessoriesCostPerWp;
         const additionalCosts = getAdditionalCostsTotal();
-        const transportTotalCost = panelTransportTotal + inverterTransportTotal + batteryTransportTotal;
-        const totalEPCCost = panelsTotalCost + inverterTotalCost + batteryTotalCost +
-          constructionTotalCost + accessoriesTotalCost + additionalCosts + transportTotalCost;
+        
+        let totalEPCCost = 0;
+        if(el('include-panelsCost').checked) totalEPCCost += panelsTotalCost;
+        if(el('include-inverterCost').checked) totalEPCCost += inverterTotalCost;
+        if(el('include-batteryCost').checked) totalEPCCost += batteryTotalCost;
+        if(el('include-constructionTotalCost').checked) totalEPCCost += constructionTotalCost;
+        if(el('include-accessoriesTotalCost').checked) totalEPCCost += accessoriesTotalCost;
+        if(el('include-additionalCostsTotal').checked) totalEPCCost += additionalCosts;
+        if(el('include-panelTransportTotal').checked) totalEPCCost += panelTransportTotal;
+        if(el('include-inverterTransportTotal').checked) totalEPCCost += inverterTransportTotal;
+        if(el('include-batteryTransportTotal').checked) totalEPCCost += batteryTransportTotal;
+
         let finalClientPrice = 0;
         if (el('useProfitMargin').checked) {
           const pm = (parseFloat(el('profitMargin').value) || 0) / 100;
@@ -800,6 +875,19 @@
       el('addCostButton').addEventListener('click', addAdditionalCostField);
       el('addBatteryButton').addEventListener('click', addBatteryRow);
       el('addBmsButton').addEventListener('click', addBmsRow);
+
+      el('toggle-all-costs').addEventListener('change', (e) => {
+        qsa('.cost-checkbox').forEach(cb => {
+            cb.checked = e.target.checked;
+        });
+        calculateCosts();
+      });
+
+      el('results').addEventListener('change', (e) => {
+        if(e.target.classList.contains('cost-checkbox')) {
+            calculateCosts();
+        }
+      });
 
     el('generateExcelButton').addEventListener('click', () => {
         const wb = XLSX.utils.book_new();
