@@ -333,7 +333,7 @@
                 <td id="result-accessoriesTotalCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
                 <td id="result-accessoriesUnitCost" class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">0.00</td>
             </tr>
-            <tr>
+            <tr id="additional-costs-header-row">
                 <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm font-bold text-gray-900 flex items-center">
                     <input type="checkbox" id="include-additionalCostsTotal" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
                     <label for="include-additionalCostsTotal">Zusätzliche Kosten</label>
@@ -341,7 +341,7 @@
                 <td id="result-additionalCostsTotal" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td>
                 <td id="result-additionalCostsPerWp" class="px-2 py-3 sm:px-6 sm:py-4 text-right font-bold text-sm text-gray-500">0.00</td>
             </tr>
-            <tr>
+            <tr id="transport-module-row">
                 <td class="px-2 py-3 sm:px-6 sm:py-4 text-sm text-gray-900 font-bold flex items-center">
                     <input type="checkbox" id="include-panelTransportTotal" class="cost-checkbox h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 mr-3" checked>
                     <label for="include-panelTransportTotal">Transport Module</label>
@@ -737,6 +737,34 @@
         setText('result-finalClientPrice', finalClientPrice.toFixed(2));
         el('results').classList.remove('hidden');
         el('generateExcelButton').classList.remove('hidden');
+        
+        // Dynamic additional costs in results table
+        qsa('.additional-cost-result-row').forEach(row => row.remove());
+        const resultsTableBody = qs('#results tbody');
+        const transportModuleRow = el('transport-module-row');
+        qsa('.additional-cost-row').forEach((costRow, index) => {
+            const description = qs(`#addCostDesc_${index}`).value || `Zusatzkosten ${index + 1}`;
+            const type = qs(`#addCostType_${index}`).value;
+            const qty = numVal(qs(`#addCostQty_${index}`));
+            const price = numVal(qs(`#addCostPrice_${index}`));
+            let itemTotal = 0;
+            if (type === 'perWp') {
+                itemTotal = price * totalPowerWp;
+            } else {
+                itemTotal = qty * price;
+            }
+
+            if (itemTotal > 0) {
+                const newRow = document.createElement('tr');
+                newRow.className = 'additional-cost-result-row';
+                newRow.innerHTML = `
+                    <td class="pl-8 pr-2 py-3 sm:pl-12 sm:pr-6 sm:py-4 text-sm text-gray-700 whitespace-nowrap">${description}</td>
+                    <td class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">${itemTotal.toFixed(2)}</td>
+                    <td class="px-2 py-3 sm:px-6 sm:py-4 text-right text-sm text-gray-500">${safeDiv(itemTotal, totalPowerWp)}</td>
+                `;
+                resultsTableBody.insertBefore(newRow, transportModuleRow);
+            }
+        });
       };
 
       // --- Event Listeners ---
